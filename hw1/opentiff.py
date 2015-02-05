@@ -20,6 +20,7 @@ for image in image_files:
     im = Image.open(image)
     vectors.append(np.array(im.getdata()))
 
+# NOW THIS IS THE A IN QUESTION
 A = np.array(vectors, dtype='f').T
 
 def rank_one_approx(A):
@@ -41,7 +42,7 @@ def rank_one_approx(A):
     return approx
 
 rank_one = rank_one_approx(A)
-foregrounds = A - rank_one
+fg = A - rank_one
 
 def normalize_grayscale(A):
     """return a linearly normalized copy of the matrix with
@@ -54,7 +55,7 @@ def normalize_grayscale(A):
        necessary for passing to PIL.Image(...)
     """
     # must be able to handle float point arithmetic, but what do?
-    # assert A.dtype == np.int32 
+    #assert A.dtype == np.int32 
     A_max, A_min = (A.max(), A.min())
     if A_max - A_min == 0:
         # should be descriptive later
@@ -62,23 +63,21 @@ def normalize_grayscale(A):
         return A
     else:
         return 255 * (A - A_min) / (A_max - A_min)
-bg_matrices = [linear_normalize(column) for column in rank_one.T]
-# vectors already filled
 
-# iterate over columns
-#for column in fg_images.T:
-#    # make a picture
-#    temp = Image.fromarray(column.reshape((512,512)))
-#    foregrounds.append(temp) 
-#    fga.append(column.reshape((512,512)))
-#for column in rank_one.T:
-#    temp = Image.fromarray(column.reshape((512,512)))
-#    backgrounds.append(temp)
-#
-#for i, image in enumerate(foregrounds):
-#    filestring = 'data/MOTION/fg_{}.gif'.format(i+1)
-#    image.save(filestring)
-#
-#for i, image in enumerate(backgrounds):
-#    filestring = 'data/MOTION/bg_{}.gif'.format(i+1)
-#    image.save(filestring)
+# too many steps going on here :/
+fg_matrices = [normalize_grayscale(column).reshape((512,512)) for column in fg.T]
+bg_matrices = [normalize_grayscale(column).reshape((512,512)) for column in rank_one.T]
+
+# this is for debugging. fix your code!
+show = lambda x: Image.fromarray(x).show()
+
+# apparently the tiff plugin fails if the pixels are still floats
+for i, image in enumerate(fg_matrices):
+    im = Image.fromarray(image.astype('uint8'))
+    filestring = 'data/MOTION/fg_{}.tiff'.format(i+1)
+    im.save(filestring)
+
+for i, image in enumerate(bg_matrices):
+    im = Image.fromarray(image.astype('uint8'))
+    filestring = 'data/MOTION/bg_{}.tiff'.format(i+1)
+    im.save(filestring)
