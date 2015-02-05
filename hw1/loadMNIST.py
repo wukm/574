@@ -39,19 +39,31 @@ from opentiff import normalize_grayscale
 # this is one step better than hardcoding but still sloppy
 DATA_DIR = os.path.join(os.getcwd(), 'data/', 'MNIST/')
 
-def load(digit, type_str='all'):
+def load_all(digit):
+    """ combine test and training images into one huge matrix"""
+    tests = load(digit, type_str='test')
+    trains = load(digit, type_str='train') # choo choo
+    
+    return numpy.concatenate((tests, trains), axis=0)
+
+def load(digit, type_str='train'):
     """
     this returns a matrix whose columns are the images corresponding to the
     digit `digit`. and yes, right now there can only be one digit.
     fix that later.
     """
-    #assert type_str in ('all', 'test', 'train'), "need a valid label"
+    assert type_str in ('test', 'train'), "use the load_all function"
     #assert type_str == 'test', "i've only coded the part for test" 
 
-    images = load_images('testing_images')
-    labels = load_labels('testing_labels')  
-    
-    #images = images.T
+    if type_str == 'test':
+        base = 'testing'
+    else:
+        base = 'training'
+
+    img_file = '{}_images'.format(base)
+    lbl_file = '{}_labels'.format(base)
+    images = load_images(img_file)
+    labels = load_labels(lbl_file)
 
     # make a list of the columns that correspond to `digit`
     relevant = [images[i] for i , label in enumerate(labels) if label == digit]
@@ -66,7 +78,7 @@ def rank_two_approx(A):
 
     
 def load_images(filename='training_images'):
-
+    """stuff."""
     file_path = os.path.join(DATA_DIR, filename)
     with open(file_path, 'rb') as f:
         b = f.read() # hope ya get it all
@@ -123,14 +135,26 @@ def load_labels(filename):
 if __name__ == "__main__":
 
     assert os.path.isdir(DATA_DIR), "cannot find data directory in {}".format(DATA_DIR)
-    
-    for d in (1,2):
-        A = load(d)
-        AA, (u, s, v) = rank_two_approx(A)
+    #for t in ('train', 'test'): 
+    #    for d in (1,2):
+            #A = load(d)
+            #AA, (u, s, v) = rank_two_approx(A)
 
+            #v1 = v[0].reshape((28,28))
+            #v2 = v[1].reshape((28,28))
+            #
+            #v1 = normalize_grayscale(v1)
+            #v2 = normalize_grayscale(v2)
+
+            #Image.fromarray(v1).show()
+            #Image.fromarray(v2).show()
+    for d in (1,2):
+        A = load_all(d)
+        AA, (u, s, v) = rank_two_approx(A)
+        
         v1 = v[0].reshape((28,28))
         v2 = v[1].reshape((28,28))
-        
+         
         v1 = normalize_grayscale(v1)
         v2 = normalize_grayscale(v2)
 
