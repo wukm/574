@@ -26,11 +26,6 @@ def normalize_grayscale(A):
     """return a linearly normalized copy of the matrix with
        0 as min and 1 as max.
        note the matrix A must be float type of some sort.
-       i actually don't know what happens in memory vs. performing
-       these operations in the global namespace :/
-
-       also note: returns same type. integer type is okay, but isn't really
-       necessary for passing to PIL.Image(...)
     """
     # must be able to handle float point arithmetic, but what do?
     #assert A.dtype == np.int32 

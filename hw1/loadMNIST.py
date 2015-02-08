@@ -14,7 +14,7 @@ author: luke wukmer
 
 NOTE: This is actually the entirety of the HW1 q5 code, not just a porting of
 loadMNIST.m. Hopefully a cleaned up version of this will surface later (this
-code is also hosted on github: the repository is at github.com/wukm/574).
+code is also hosted on github: the repository is at github.com/wukm/579).
 Also, I apologize for the disregard to portability, I may work on that at a
 later date.
 """
@@ -23,9 +23,6 @@ import struct
 import array
 import numpy
 import os
-import scipy.sparse.linalg as sla
-from PIL import Image
-from opentiff import normalize_grayscale
 
 # this is one step better than hardcoding but still sloppy
 DATA_DIR = os.path.join(os.getcwd(), 'data/', 'MNIST/')
@@ -73,18 +70,6 @@ def load(digit, type_str='train'):
 
     return numpy.array(relevant)
 
-def rank_two_approx(A):
-    """ returns the approximated matrix, as well as the u, s, v of the
-    decomposition as well. a minor bother is that the *second* singular value is
-    actually greater than the first -- it seems that scipy.sparse.svds outputs
-    in opposite order. doesn't matter.
-    """
-    u, s, v = sla.svds(A, k=2, which='LM')
-    
-    # nasty syntax
-    approx = u.dot(s*numpy.eye(2)).dot(v)
-    return approx, (u, s, v)
-
     
 def load_images(filename='training_images'):
     """extracts images from the binary blobs "*_images". """ 
@@ -94,10 +79,10 @@ def load_images(filename='training_images'):
 
     # grab the first four numbers ...
     # fmt='>i' means big-endian int32
-    magic_no, n_images, n_rows, n_cols = (struct.unpack('>i', b[i*4:(i+1)*4]) for i in range(4))
+    magic, n_images, n_rows, n_cols = (struct.unpack('>i', b[i*4:(i+1)*4]) for i in range(4))
 
     # i am a god-fearing man
-    assert magic_no[0] == 2051, "bad magic number, what do?"
+    assert magic[0] == 2051, "bad magic number, what do?"
 
 
     # so i think you can use the standard libary's "array" for this, just
@@ -125,9 +110,9 @@ def load_labels(filename):
     with open(file_path, 'rb') as f:
         b = f.read()
 
-    magic_no, n_labels = (struct.unpack('>i', b[i*4:(i+1)*4]) for i in range(2))
+    magic, n_labels = (struct.unpack('>i', b[i*4:(i+1)*4]) for i in range(2))
 
-    assert magic_no[0] == 2049, "bad magic number, what do?"
+    assert magic[0] == 2049, "bad magic number, what do?"
 
     label_stream = array.array('B', b[8:])
     
@@ -136,52 +121,4 @@ def load_labels(filename):
     # label_stream is actually type array.array, which is iterable surely.
     # i'll convert it anyway...
     return tuple(label_stream)
-
-if __name__ == "__main__":
-
-    assert os.path.isdir(DATA_DIR), "cannot find data directory in {}".format(DATA_DIR)
-        
-    for d in (1,2):
-        A = load_all(d)
-        AA, (u, s, v) = rank_two_approx(A)
-       
-        # convert right singular vectors to image shape
-        v1 = v[0].reshape((28,28))
-        v2 = v[1].reshape((28,28))
-
-        # because of dumbness in the interface, v2 is actually the right
-        # singular vector corresponding to the largest singular value
-        v2, v1 = v1, v2
-
-        v1 = normalize_grayscale(v1)
-        v2 = normalize_grayscale(v2)
-        
-        # convert to uint8 again for easier writing
-        v1 = v1.astype('uint8')
-        v2 = v2.astype('uint8')
-        
-        file_base = "all_{}_{}.tiff"
-        Image.fromarray(v1).save(file_base.format(d, 'v1'))
-        Image.fromarray(v2).save(file_base.format(d, 'v2'))
-        
-        # see comment above
-        u1 = u.T[1]
-        u2 = u.T[0]
-
-        # returns index of maximum / minimum in question
-        ibig, ismall = u2.argmax(), u1.argmin()
-        
-        big = A[ibig].reshape((28,28))
-        small = A[ismall].reshape((28,28))
-
-        big = normalize_grayscale(big)
-        small = normalize_grayscale(small)
-
-        big = big.astype('uint8')
-        small = small.astype('uint8')
-
-        Image.fromarray(big).save(file_base.format(d, 'big'))
-        Image.fromarray(small).save(file_base.format(d, 'small'))
-
-
 
