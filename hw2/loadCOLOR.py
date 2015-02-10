@@ -20,3 +20,12 @@ y   ->      a classification vector for the training data. the i-th component of
         y is the classification (1 -> fg , 0 -> bg) of the i-th pixel in Xtrain
         above.
 """
+
+import PIL.Image
+import numpy
+
+#   for 3 files, you can either use a dictionary or a tiny function here.
+f = 'data/COLOR/image.jpg'
+im_raw = PIL.Image.open(f)
+image = numpy.array(im_raw)
+
