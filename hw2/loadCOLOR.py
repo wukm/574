@@ -24,8 +24,36 @@ y   ->      a classification vector for the training data. the i-th component of
 import PIL.Image
 import numpy
 
-#   for 3 files, you can either use a dictionary or a tiny function here.
-f = 'data/COLOR/image.jpg'
-im_raw = PIL.Image.open(f)
-image = numpy.array(im_raw)
+def make_float_array(filename):
+    """
+    Input:  filename of 256-color (grayscale or RGB) image
+    Output: a numpy.array with dtype float (scaled between 0 and 1)
 
+    Gross function name, whatever.
+    Dimension is not altered in any way.
+    """
+    
+    im_raw = PIL.Image.open(filename)
+    im = numpy.array(im_raw, dtype='f')
+    im /= 255
+    return im
+
+#   should not be raw file paths, that's ugly.
+
+img = make_float_array('data/COLOR/image.jpg')
+forg_mask = make_float_array('data/COLOR/mask0.jpg')
+back_mask = make_float_array('data/COLOR/mask1.jpg')
+
+# surely there's a better way to do this?
+# vectorize each and make a new matrix with those vectors as rows
+
+dim = (img.shape[0]*img.shape[1], 1)
+R = img[:,:,0].reshape(dim)
+G = img[:,:,1].reshape(dim)
+B = img[:,:,2].reshape(dim)
+
+X = numpy.concatenate((R,G,B),1)
+
+forg = numpy.sum(forg_mask, 2)
+forg = forg.reshape(dim)
+forg_pix = numpy.nonzero(forg > 0.5)
