@@ -56,4 +56,11 @@ X = numpy.concatenate((R,G,B),1)
 
 forg = numpy.sum(forg_mask, 2)
 forg = forg.reshape(dim)
-forg_pix = numpy.nonzero(forg > 0.5)
+forg_pix = numpy.nonzero(forg > 0.5) # FUCK THIS LINE
+
+back = numpy.sum(back_mask, 2)
+back = back.reshape(dim)
+back_pix = back > .5
+Xtrain = numpy.concatenate((X[forg_pix], X[back_pix]))
+
+y = numpy.zeros_like(Xtrain)
