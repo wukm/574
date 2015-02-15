@@ -69,9 +69,9 @@ def load_color():
     y = numpy.zeros_like(Xtrain)
     # forg_pix is a tuple of two arrays with equal size. yeesh.
     y[:forg_pix[0].size] = 1
-    return X, Xtrain, y
+    return img, X, Xtrain, y
 
 if __name__ == "__main__":
     # just for testing this with python -i loadCOLOR.py
-    X, Xtrain, y = load_color()
+    img, X, Xtrain, y = load_color()
 
