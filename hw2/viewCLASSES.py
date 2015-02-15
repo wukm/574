@@ -28,11 +28,12 @@ def view_classes(img,y):
     # y is a m*n vector (row i guess...)
 
     dim = img.shape[:2]
-    
+    print(dim) 
     forg = numpy.array(y > .5, dtype='d')
     back = numpy.array(y <= .5, dtype='d')
 
-    for i, mat in enumerate(forg, back):
+    for i, mat in enumerate((forg, back)):
+        print(mat.shape)
         mat = mat.reshape(dim)
         mat = numpy.tile(forg, (1,1,3)) # might need to be (3,1,1)?
         assert mat.shape == img.shape, "you messed up the dimensions"

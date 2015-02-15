@@ -72,6 +72,8 @@ def load_color():
     return img, X, Xtrain, y
 
 if __name__ == "__main__":
+    from viewCLASSES import view_classes
     # just for testing this with python -i loadCOLOR.py
     img, X, Xtrain, y = load_color()
+    view_classes(img, y)
 
