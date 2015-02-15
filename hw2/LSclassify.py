@@ -33,5 +33,7 @@ def ls_classify(Xtrain, y, lamb):
 
     real comments here later.
     """
-    pass
     #return alpha, beta
+
+if __name__ == "__main__":
+    pass

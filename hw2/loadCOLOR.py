@@ -63,17 +63,18 @@ def load_color():
 
     back = numpy.sum(back_mask, 2)
     back = back.reshape(dim)
-    back_pix = back > .5
-    Xtrain = numpy.concatenate((X[forg_pix], X[back_pix]))
 
-    y = numpy.zeros_like(Xtrain)
+    # okay, still VERY confused about why the original line was different. we
+    # want indices, right? is matlab syntax different?
+    back_pix = numpy.nonzero(back > 0.5)
+    #back_pix = back > .5
+    Xtrain = numpy.concatenate((X[forg_pix[0],:], X[back_pix[0],:]))
+
+    y = numpy.zeros_like(Xtrain[:,0])
     # forg_pix is a tuple of two arrays with equal size. yeesh.
     y[:forg_pix[0].size] = 1
     return img, X, Xtrain, y
-
+    #return locals()
 if __name__ == "__main__":
-    from viewCLASSES import view_classes
     # just for testing this with python -i loadCOLOR.py
     img, X, Xtrain, y = load_color()
-    view_classes(img, y)
-
