@@ -25,4 +25,4 @@ def classify(x, α, β):
 
 Y = α + numpy.dot(X, β)
 
-#view_classes(img, Y)
+view_classes(img, Y)

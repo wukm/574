@@ -14,7 +14,7 @@ def make_8bit_array(array):
     converts a matrix with float elements between 0 and 1
     to one with int elements in (0,255)
     """
-    return (255 * array).astype('int')
+    return (255 * array).astype('uint8')
 def view_classes(img,y):
     """
     Input:
@@ -47,6 +47,7 @@ def view_classes(img,y):
         im = mat * img # should be same element size
         im = make_8bit_array(im)
         
-        #PIL.Image.fromarray(im, mode='RGB').show(title="figure {}".format(i+1))
-    PIL.Image.fromarray(img, mode='RGB').show()
+        PIL.Image.fromarray(im, mode='RGB').show(title="figure {}".format(i+1))
+    x = PIL.Image.fromarray(make_8bit_array(img), mode='RGB')
+    x.show()
     return None
