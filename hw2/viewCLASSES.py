@@ -9,6 +9,12 @@ provides a method to examine fg/bg extraction with a viewable image
 import numpy
 import PIL.Image
 
+def make_8bit_array(array):
+    """
+    converts a matrix with float elements between 0 and 1
+    to one with int elements in (0,255)
+    """
+    return (255 * array).astype('int')
 def view_classes(img,y):
     """
     Input:
@@ -35,9 +41,12 @@ def view_classes(img,y):
     for i, mat in enumerate((forg, back)):
         print(mat.shape)
         mat = mat.reshape(dim)
-        mat = numpy.tile(forg, (1,1,3)) # might need to be (3,1,1)?
+        mat = numpy.expand_dims(mat, 2)
+        mat = numpy.tile(mat, (1,1,3)) # might need to be (3,1,1)?
         assert mat.shape == img.shape, "you messed up the dimensions"
         im = mat * img # should be same element size
-        PIL.Image.fromarray(im).show(title="figure {}".format(i+1))
-    
+        im = make_8bit_array(im)
+        
+        #PIL.Image.fromarray(im, mode='RGB').show(title="figure {}".format(i+1))
+    PIL.Image.fromarray(img, mode='RGB').show()
     return None

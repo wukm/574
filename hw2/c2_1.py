@@ -20,7 +20,7 @@ def classify(x, α, β):
     pass
 #planes = tuple((λ, ls_classify(Xtrain, y, λ)) for λ in (.005, .5, 10, 250, 800))
 
-λ = 10
+λ = .005
 α, β = ls_classify(Xtrain, y, λ)
 
 Y = α + numpy.dot(X, β)
