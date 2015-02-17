@@ -119,10 +119,14 @@ def load(digits, type_str='train'):
     images = load_images(img_file)
     labels = load_labels(lbl_file)
 
-    # make a list of the rows that correspond to `digit`
-    relevant = [images[i] for i , label in enumerate(labels) if label in digits]
+    # list of tuples ( (row corresponding to a relevant digit), (its label) )
+    # probably a simpler way to do this, eh. 
+    relevant = [(images[i] , label) for i , label in enumerate(labels) if label in digits]
 
-    return numpy.array(relevant)
+    images = numpy.array((x[0] for x in relevant))
+    labels = tuple(x[1] for x in relevant)
+    
+    return images, labels
 
     
 def load_images(filename='training_images'):
@@ -139,9 +143,10 @@ def load_images(filename='training_images'):
     assert magic[0] == 2051, "bad magic number, what do?"
 
 
-    # so i think you can use the standard libary's "array" for this, just
-    # because binary data of any sort is kinda dodgy, but this grabs 'the rest'
-    # format='B' means unsigned char === 'uint8', and apparently endianness doesn't matter
+   
+    # using array from stdlib, since binary data is dodgy.
+    # honestly int(b[16:]) works in practice format='B' means unsigned char ===
+    # 'uint8', and apparently endianness doesn't matter
     image_stream = array.array('B', b[16:])
 
     # so each 28*28 byte portion of image_stream is a flattened image. these two
