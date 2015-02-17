@@ -70,11 +70,9 @@ def load_mnist(digits, subset='all', path=None):
 
     # should fix this. so much redundancy. files can be read up to 4 times
     if subset == 'all':
-        images = load_all(digits)
-        #labels =
+        images, labels = load_all(digits)
     elif subset in ('train', 'test'):
-        images = load(digits, subset)
-        #labels = 
+        images, labels = load(digits, subset)
     else:
         #do better here
         raise Exception('please specify a valid subset')
@@ -94,10 +92,13 @@ def load_all(digits):
     n2 are from 'training'
     """
 
-    tests = load(digits, type_str='test')
-    trains = load(digits, type_str='train') # choo choo
-    
-    return numpy.concatenate((tests, trains), axis=0)
+    tests, test_labels = load(digits, type_str='test')
+    trains, train_labels = load(digits, type_str='train') # choo choo
+
+    images = numpy.concatenate((tests, trains), axis=0)
+    labels = test_labels + train_labels 
+
+    return images, labels
 
 def load(digits, type_str='train'):
     """
@@ -122,8 +123,7 @@ def load(digits, type_str='train'):
     # list of tuples ( (row corresponding to a relevant digit), (its label) )
     # probably a simpler way to do this, eh. 
     relevant = [(images[i] , label) for i , label in enumerate(labels) if label in digits]
-
-    images = numpy.array((x[0] for x in relevant))
+    images = numpy.array([x[0] for x in relevant])
     labels = tuple(x[1] for x in relevant)
     
     return images, labels
