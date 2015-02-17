@@ -12,11 +12,7 @@
 loadMNIST.py
 author: luke wukmer
 
-NOTE: This is actually the entirety of the HW1 q5 code, not just a porting of
-loadMNIST.m. Hopefully a cleaned up version of this will surface later (this
-code is also hosted on github: the repository is at github.com/wukm/579).
-Also, I apologize for the disregard to portability, I may work on that at a
-later date.
+TODO: digit input as a list
 """
 
 import struct
