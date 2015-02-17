@@ -2,17 +2,21 @@
 
 #   TODO
 #   -   needs heavy refactoring for readability (I MADE A SPAGHETTI)
-#   -   whatever the **** is going on in loadMNIST.m: lines 23-25
 #   -   match interface of loadMNIST.m or ... don't?
-#   -   digits is potentially a list
 #   -   these functions are supposed to return labels
+#   -   make top level load_mnist() function
+#   -   if above done, for the love of god read the files once only per
+#       function call, not (up to) four times.
 #   -   portability
 
 """
 loadMNIST.py
 author: luke wukmer
 
-TODO: digit input as a list
+ohh, so this is exactly the data set i'm working with:
+http://en.wikipedia.org/wiki/MNIST_database
+
+...that explains the cryptic name
 """
 
 import struct
@@ -23,7 +27,61 @@ import os
 # this is one step better than hardcoding but still sloppy
 DATA_DIR = os.path.join(os.getcwd(), 'data/', 'MNIST/')
 
-def load_all(digit):
+def load_mnist(digits, subset='all', path=None):
+    """
+    load_mnist(digits, [subset='all' [,path=None]])) -> images, labels
+
+    INPUT:
+
+    digits is an iterable of ints 0-9 of digits to return. (repetitions are
+    tolerated).
+
+    if specified, subset must be 'all' 'train' or 'test'. this will load a
+    particular subset of the MNIST data set. default is 'all'
+
+    if specified, path is a string which specifies which directory the files are
+    in. the following files are
+
+    (path)
+    ├── testing_images
+    ├── testing_labels
+    ├── training_images
+    ├── training_labels
+    └── (...)
+
+    if path is not specified, the function searches the result of
+
+        os.path.join(os.getcwd(), 'data/', 'MNIST/')
+
+    although this behavior is subject to change.
+
+    OUTPUT:
+
+    `images` is a N by (28*28) numpy.array, where N is the total number of
+    images requested, with the 28*28 pixels of each image vectorized.
+    
+    `labels` is a N-tuple, where N is the total number of images requested.
+
+    n.b. This (should be) the only public function here.
+    """ 
+    
+    if path is None:
+        path = os.path.join(os.getcwd(), 'data/', 'MNIST/')
+
+    # should fix this. so much redundancy. files can be read up to 4 times
+    if subset == 'all':
+        images = load_all(digits)
+        #labels =
+    elif subset in ('train', 'test'):
+        images = load(digits, subset)
+        #labels = 
+    else:
+        #do better here
+        raise Exception('please specify a valid subset')
+    
+    return images
+    #return images, labels
+def load_all(digits):
     """
     returns an A matrix for both training and testing images for a particular
     digit (at this point, digit is a scalar only). Note this is equivalent to
@@ -36,12 +94,12 @@ def load_all(digit):
     n2 are from 'training'
     """
 
-    tests = load(digit, type_str='test')
-    trains = load(digit, type_str='train') # choo choo
+    tests = load(digits, type_str='test')
+    trains = load(digits, type_str='train') # choo choo
     
     return numpy.concatenate((tests, trains), axis=0)
 
-def load(digit, type_str='train'):
+def load(digits, type_str='train'):
     """
     this returns a matrix whose columns are the images corresponding to the
     digit `digit`.
@@ -62,7 +120,7 @@ def load(digit, type_str='train'):
     labels = load_labels(lbl_file)
 
     # make a list of the rows that correspond to `digit`
-    relevant = [images[i] for i , label in enumerate(labels) if label == digit]
+    relevant = [images[i] for i , label in enumerate(labels) if label in digits]
 
     return numpy.array(relevant)
 
