@@ -79,8 +79,8 @@ def load_mnist(digits, subset='all', path=None):
         #do better here
         raise Exception('please specify a valid subset')
     
-    return images
-    #return images, labels
+    return images, labels
+
 def load_all(digits):
     """
     returns an A matrix for both training and testing images for a particular
@@ -177,7 +177,5 @@ def load_labels(filename):
     
     assert len(label_stream) == n_labels[0], "mismatch in label length"
     
-    # label_stream is actually type array.array, which is iterable surely.
-    # i'll convert it anyway...
     return tuple(label_stream)
 
