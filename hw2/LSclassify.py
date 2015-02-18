@@ -6,7 +6,6 @@ Least squares clasification.
 """
 
 import numpy
-#import scipy.sparse.linalg as sla
 import scipy.linalg
 
 def ls_classify(Xtrain, y, λ):
@@ -35,27 +34,24 @@ def ls_classify(Xtrain, y, λ):
     (2) compute the SVD
     (3) compute alpha, beta
 
-    real comments here later.
     """
-    # return α, β
-    
-    x_bar = Xtrain.mean(axis=0) # average for pixels; x_bar.size -> 3
+    x_bar = Xtrain.mean(axis=0)  # average of each pixel (r,g,b); x_bar.size -> 3
     y_bar = y.mean() # average class label 
     
-    #subtract x_bar from each row in Xtrain. broadcasting!
+    # do mean centering (note: broadcasting)
     X_tilde = Xtrain - x_bar
-    # ditto
     y_tilde = y - y_bar
     
-    # woo, I don't have to use sparse!
-    # full_matrices=False is equivalent of the matlab 'econ'
+    # full_matrices=False is the equivalent of MATLAB's "econ"
+    # remember V is transposed of what it is in matlab
     U, S, V = scipy.linalg.svd(X_tilde, full_matrices=False)
 
-    # β = V(Σ² + λI)⁻¹Σ(U.T)(y_tilde)
-    c_values = S / (S*S + λ)
+    # c values
+    C = S / (S*S + λ)
 
-    # can't wait for the @ operator in python 3.5
-    β = numpy.dot(V.T, (c_values * numpy.dot(U.T, y_tilde)))
+    # google "PEP 465" :)
+    # check U.T and not U 
+    β = numpy.dot(V.T, (C * numpy.dot(U.T, y_tilde)))
     α = y_bar - numpy.dot(x_bar, β)
 
     return α, β

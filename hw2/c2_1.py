@@ -1,28 +1,35 @@
 #!/usr/bin/env python3
 
+"""
+c2_1.py
+
+(Coding I) / (HW 2 q4)
+
+finds (α, β) via least squares approximation
+
+and classifies the pixels X via 
+    y = α + < β , x >
+
+then view_classes() is called to display them
+"""
+
 from loadCOLOR import load_color
 from LSclassify import ls_classify
 from viewCLASSES import view_classes
 
 import numpy
 
-img, X, Xtrain, y = load_color()
+def main():
 
-def classify(x, α, β):
-    """
-    classify(x, α, β) -> y in {0,1}
+    img, X, Xtrain, y = load_color()
 
-    returns the label y for the given data point x by
-        y = α + < β , x >
+    for λ in (.005, .5, 10, 250, 800):
+        α, β = ls_classify(Xtrain, y, λ)
+        Y = α + numpy.dot(X, β)
 
-    OOPS I DON'T NEED TO THIS, I'LL JUST WORK ON THEM AS MATRICES
-    """
-    pass
-#planes = tuple((λ, ls_classify(Xtrain, y, λ)) for λ in (.005, .5, 10, 250, 800))
+        view_classes(img, Y, λ)
 
-λ = .005
-α, β = ls_classify(Xtrain, y, λ)
 
-Y = α + numpy.dot(X, β)
+if "__name__" == "__main__":
 
-view_classes(img, Y)
+    main()
