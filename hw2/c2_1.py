@@ -27,9 +27,7 @@ def main():
         α, β = ls_classify(Xtrain, y, λ)
         Y = α + numpy.dot(X, β)
 
-        view_classes(img, Y, λ)
+        view_classes(img, Y, λ, save=True)
 
 
-if "__name__" == "__main__":
-
-    main()
+main()
