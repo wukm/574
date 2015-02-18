@@ -9,4 +9,5 @@
 **/__pycache__/
 # don't import anything in a data dir
 **/data/*
-
+# no straggling jpgs
+**/*.jpg
