@@ -29,5 +29,5 @@ def main():
 
         view_classes(img, Y, λ, save=True)
 
-
-main()
+if __name__ == "__main__":
+    main()
