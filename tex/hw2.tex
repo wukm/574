@@ -96,6 +96,7 @@
 \providecommand{\tor}{{\rm Tor}}%
 \providecommand{\comp}{{\text{ $\scriptstyle \circ$ }}}%
 \providecommand{\cl}[1]{\overline{#1}}%
+\providecommand{\tr}{{\sf trace}}%
 
 \renewcommand{\tilde}[1]{\widetilde{#1}}%
 \numberwithin{equation}{section}
@@ -108,6 +109,10 @@
 \newcommand{\spacing}[1]{\renewcommand{\baselinestretch}{#1}\large\normalsize}
 \spacing{1.2}
 
+% END PREAMBLE %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \begin{document}
 
 \title{\Large{361B HW2}}
@@ -115,6 +120,7 @@
 \date{\today} %to change the date, just put the text you want in place of \today
 \maketitle \normalsize \thispagestyle{empty} % remove the page number from the first page
 
+%%%%% PROBLEM 1
 \begin{prob}
 Let $\mathbf{x} = ( x_1, x_2, \dots , x_n )^T$ and $f(\bf{x}) = f(x_1, \dots, x_n) : \R^n \rightarrow \R$ denote any differentiable function of $n$ variables.
 
@@ -127,86 +133,92 @@ Let $\mathbf{x} = ( x_1, x_2, \dots , x_n )^T$ and $f(\bf{x}) = f(x_1, \dots, x_
  
 \end{prob}
 
+%%%%% PROBLEM 1 SOLUTION
 \begin{proof}
-	Let $f: \R^n \rightarrow \R $ differentiable in $\R^n$. Thus the linear transformation
-	$f' ( \mathbf{x} ) \in \mathsf{L} ( \R^n , \R ) $ is completely determined by the partial derivatives w.r.t. $\{x_i\}$ (which are guaranteed to exist); that is:
-	
-	\[
-	f'(\mathbf{x})\mathbf{e}_j = \frac{\partial}{\partial x_j} (\mathbf{x})
-	\]
-	
-	where $\mathbf{e}_j$ is the $j^{th}$ component of the standard basis for $\R^n$.\\
-	
-	Fix $\bf{x} \in \R^n$. Then for arbitrary $\bf{y} \in \R^n$ , \quad
-	$\bf{y} = \displaystyle  \sum^{n} y_j \bf{e}_j $
-	\[
-	\begin{aligned}
-	\Longrightarrow \quad f'(\mathbf{x}) \, \mathbf{y} \, &= \, f'(\mathbf{x})\left(\sum^{n} y_j \mathbf{e}_j\right)\\
-								&= \, \sum^{n} y_j f'(\mathbf{x}) \mathbf{e}_j\\
-								&= \, \sum^{n} y_j \left(\frac{\partial}{\partial x_j} (\mathbf{x})\right)
-								= \langle \mathbf{y} , (\nabla f) (\mathbf{x}) \rangle \\
-	\end{aligned}
-	\]
-	
-	Now consider $\displaystyle \left(\frac{\mathrm{d}}{\mathrm{d}\epsilon} f(\mathbf{x} + \epsilon \mathbf{y}\right)$.
-	define $\vec{\gamma} : \R \rightarrow \R^n $ by $\vec{\gamma}(\epsilon) = \mathbf{x} + \epsilon \mathbf{y}.$ Then by the chain rule:
-	...
-	and so
-	\[
-	\begin{aligned}
-	\frac{\mathrm{d}}{\mathrm{d} \epsilon} \left[ f(\mathbf{x} + \epsilon \mathbf{y}) \right] \big|_{\epsilon=0}
-	&= \left[ f(\mathbf{x} + \epsilon \mathbf{y}) \right] \big|_{\epsilon=0} \\
-	&= f'(x) y \\
-	\end{aligned}
-	\]
+  Let $f: \R^n \rightarrow \R $ differentiable in $\R^n$. Thus the linear transformation
+  $f' ( \mathbf{x} ) \in \mathsf{L} ( \R^n , \R ) $ is completely determined by the partial derivatives w.r.t. $\{x_i\}$
+  (which are guaranteed to exist); that is:
+  
+  \[
+  f'(\mathbf{x})\mathbf{e}_j = \frac{\partial}{\partial x_j} (\mathbf{x})
+  \]
+  
+  where $\mathbf{e}_j$ is the $j^{th}$ component of the standard basis for $\R^n$.\\
+  
+  Fix $\bf{x} \in \R^n$. Then for arbitrary $\bf{y} \in \R^n$ , \quad
+  $\bf{y} = \displaystyle  \sum^{n} y_j \bf{e}_j $
+  \[
+  \begin{aligned}
+  \Longrightarrow \quad f'(\mathbf{x}) \, \mathbf{y} \, &= \, f'(\mathbf{x})\left(\sum^{n} y_j \mathbf{e}_j\right)\\
+                                                          &= \, \sum^{n} y_j f'(\mathbf{x}) \mathbf{e}_j\\
+                                                          &= \, \sum^{n} y_j \left(\frac{\partial}{\partial x_j} (\mathbf{x})\right)
+                                                          = \langle \mathbf{y} , (\nabla f) (\mathbf{x}) \rangle \\
+  \end{aligned}
+  \]
+  
+  Now consider $\displaystyle \left(\frac{\mathrm{d}}{\mathrm{d}\epsilon} f(\mathbf{x} + \epsilon \mathbf{y}\right)$.
+  define $\vec{\gamma} : \R \rightarrow \R^n $ by $\vec{\gamma}(\epsilon) = \mathbf{x} + \epsilon \mathbf{y}.$ Then by the chain rule:
+  ...
+  and so
+  \[
+  \begin{aligned}
+  \frac{\mathrm{d}}{\mathrm{d} \epsilon} \left[ f(\mathbf{x} + \epsilon \mathbf{y}) \right] \big|_{\epsilon=0}
+  &= \left[ f(\mathbf{x} + \epsilon \mathbf{y}) \right] \big|_{\epsilon=0} \\
+  &= f'(x) y \\
+  \end{aligned}
+  \]
 \end{proof}
 
+%%%%%% PROBLEM 2
+\begin{prob}
+\end{prob}
 
-%Let $(f_n)$ the sequence of functions $f_n:\R\rightarrow\R$ given by
-%\[
-%	f_n(x) =
-%	\begin{cases}
-%	0 & \text{if } x \leq 0 \\
-%	nx       & \text{if } 0 < x \leq \rfrac{1}{n} \\
-%	1		& \text{if } x > \rfrac{1}{n}
-%	\end{cases}	
-%\]
-%
-%Then $(f_n)$ converges pointwise on $\R$ to the function $f:\R\rightarrow\R$ by
-%\[
-%	f(x) = 
-%	\begin{cases}
-%	0 & \text{if } x \leq 0 \\
-%	1 & \text{if } x > 0
-%	\end{cases}
-%\]
-%
-%but does not converge uniformly on $\R$.
-%
-%\end{prob}
-%
-%\begin{soln*}
-%Note that the negation of uniform convergence in $\R$ for a sequence of functions is the statement
-%\[
-%	(\exists\, \epsilon > 0)(\forall N \in \N)(\exists\, x \in R)(\exists\, n > N)
-%		\big[|f_n(x) - f(x)| \geq \epsilon\big]
-%\]
-%
-%Set $\epsilon = \rfrac{1}{2}$ and let $N\in\N$ be given. Then for any $n > N$, consider the point
-%$x=\rfrac{\epsilon}{n}$.
-%
-%We then have
-%\[
-%	x = \frac{\epsilon}{n} = \frac{1}{2n} < \frac{1}{n} \quad
-%	\Longrightarrow \quad f_n(x) = nx = n\left( \frac{1}{2n}\right) = \frac{1}{2}
-%\]
-%such that
-%\[
-%	\left| f_n(x) - f(x) \right| = \left|\, \frac{1}{2} - 0 \, \right| = \frac{1}{2} \geq \epsilon = \frac{1}{2}
-%\]
-%
-%Thus for this choice of $\epsilon, N$ we have found a $x$ for any $n>N$ such that the inequality is not less than $\epsilon$; uniform convergence is not possible. \qed
-%\end{soln*}
+\begin{proof}
+\[
+  f(X) := \frac{1}{2}\tr\left((AX-B)^T(AX-B)\right)
+\]
+\[
+  \Rightarrow \quad   
+  \left[ \frac{d}{d \epsilon} f(X + \epsilon Y) \right]_{\epsilon=0} 
+  = \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr[ ( A (X+ \epsilon Y ) - B)^T ( A ( X + \epsilon Y ) - B)]\right]_{\epsilon=0} \\
+\]
+\[
+\begin{aligned}
+  &= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr[ ( (AX)^T + \epsilon (AY)^T - B^T ) ( AX - \epsilon AY -B ) \right]_{\epsilon=0} \\
+  &= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr\left( \epsilon^2 (AY)^T(AY)
+          + \epsilon (AY)^T (AX-B)
+          + \epsilon (AY) (AX-B)
+          + (AX-B)^T (AX-B) \right)\right]_{\epsilon=0} \\
+  &= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr\left( \epsilon^2 (AY)^T(AY)
+          +  2 \epsilon (AY)^T (AX-B)
+          + (AX-B)^T (AX-B) \right)\right]_{\epsilon=0} \\
+  &= \frac{1}{2} \frac{d}{d \epsilon} \left[ [ \epsilon^2 \ \tr( \, \cdots \, )
+          + 2 \epsilon \ \tr( (AY)^T (AX-B) )
+          + \tr( \, \cdots \, )]\right]_{\epsilon=0} \\
+  &= \frac{1}{2} \left( 2 \epsilon \ \tr( \, \cdots \, ) + 2 \tr( (AY)^T (AX -B)) + 0 \right) \big|_{\epsilon=0} \\
+  &= \tr \left( (AY)^T (AX - B) \right) \\
+\end{aligned}
+\]
+\end{proof}
 
+%%%%%%PROBLEM 3
+\begin{prob}
+\end{prob}
+
+%%%%%%PROBLEM 3 SOLUTION
+\begin{proof}
+  Let $\vec{X}$ be the vectorized form of $X \in \R^{m \times n}$
+  and $f: \R^{m \times n} \rightarrow \R$.
+  (Note that $\R^{m \times n} \cong \R^{mn}$ and thus
+  $f(X) = \tilde{f}(\vec{X})$ in $\R $ for $ \tilde{f}:\R^{mn} \rightarrow \R$,
+  so I can refer to either function as $f$ without issue.)
+
+  Let $Y \in \R^{m \times n}$ arbitrary
+  and associate $\vec{Y} \in \R^{mn} $ as before.
+
+  Then
+
+
+\end{proof}
 
 \end{document}
