@@ -16,3 +16,6 @@
 **/*.aux
 **/*.log
 **/*.dvi
+
+# these shouldn't be here when i commit anyway but eh. vim remnants
+**/*.swp
