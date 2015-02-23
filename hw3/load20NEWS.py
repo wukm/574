@@ -88,8 +88,8 @@ def load_20_news(groups, subset):
 
         docs = numpy.concatenate((X1,X2), axis=0)
         lab = numpy.concatenate((T1,T2), axis=0)
-        docs = [X1; X2];
-        lab = [T1;T2];
+        #docs = [X1; X2];
+        #lab = [T1;T2];
     else
         raise Exception("subset must be 'train', 'test', or 'all'")
 
