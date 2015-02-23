@@ -9,5 +9,10 @@
 **/__pycache__/
 # don't import anything in a data dir
 **/data/*
-# no straggling jpgs
+# no straggling jpgs that should be outputted elsewhere really
 **/*.jpg
+
+# no latex remnants
+**/*.aux
+**/*.log
+**/*.dvi
