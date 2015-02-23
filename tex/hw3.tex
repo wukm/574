@@ -190,13 +190,37 @@
                 \quad \forall z \in \R \\
   \end{aligned}
   \]
+  \[
+  \begin{aligned}
+    h(z)   &:= \log(1+e^{-z}) \\
+    h'(z)   &= \frac{-e^{z}}{1+e^{-z}} \\
+            &= \left(\frac{e^{z}}{e^{z}}\right) \frac{-e^{z}}{1+e^{-z}}
+                  = \frac{-1}{e^{z} + 1 }\\
+    h''(z)  &= \frac{(e^{z}+1)(0) - (-1)e^{z}}{(e^{z}+1)^2}
+            &= \frac{e^{z}}{(e^{z}+1)^2} \, \geq \, 0
+                \quad \forall z \in \R \\
+  \end{aligned}
+  \]
+
+  Thus $g, h$ are each convex in $\R$.
+  As $z(\vec{x_i}) \in \R$, we note that
+  $g(z(\vec{x_i})), h(z(\vec{x_i}))$ are each convex in $\R$.
+
+  Using the result of (1b) above, we see that
+  \[
+    E(\alpha, \beta) = \sum g(\vec{x_i}) (1 - y_i) + \sum h(\vec{x_i})y_i
+  \]
+  is simply a sum of convex function with appropriate scalars, and thus E is
+  convex.\\
+
 \end{proof}
 
 %%%%%%PROBLEM 1D
 \begin{prob*}[\bf{1d}]
 \end{prob*}
 
-\begin{proof} See attached.
+\begin{proof}
+
 \end{proof}
 \end{document}
 
