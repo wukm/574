@@ -63,7 +63,8 @@ def line_search(dt, p, α, β, X, y, λ):
     E = log_energy(α, β, X, y, λ)
     
     #update α, β via (2)
-    # α, β =   
+    α = α - (dt * p[0])
+    β = β - (dt * p[1:])
 
     E_new = log_energy(α, β, X, y, λ)
 
