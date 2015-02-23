@@ -1,0 +1,202 @@
+\documentclass[10pt]{article}
+
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{amsxtra, amscd, geometry, graphicx}
+\usepackage{endnotes}
+\usepackage{cancel}
+%\usepackage[all,cmtip]{xypic}
+\usepackage{mathrsfs}
+\usepackage{listings}
+%\usepackage[pdftex]{hyperref}
+%\usepackage[dvips,bookmarks,bookmarksopen,backref,colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue}](hyperref}
+
+% Makes the margin size a little smaller.
+\geometry{letterpaper,margin=1.3in}
+
+% Possible font packages. Choose one and comment out the rest.
+\usepackage{times}%
+%\usepackage{helvet}%
+%\usepackage{palatino}%
+%\usepackage{bookman}%
+
+% These are italic.
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem*{thm*}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem*{prop*}{Proposition}
+\newtheorem{conj}{Conjecture}
+\newtheorem*{conj*}{Conjecture}
+\newtheorem{lem}{Lemma}
+  \makeatletter
+  \@addtoreset{lem}{thm}
+  \makeatother 
+\newtheorem*{lem*}{Lemma}
+\newtheorem{cor}{Corollary}
+  \makeatletter
+  \@addtoreset{cor}{thm}
+  \makeatother 
+\newtheorem*{cor*}{Corollary}
+
+%\newtheorem{lem}[thm]{Lemma}
+%\newtheorem{remark}[thm]{Remark}
+%\newtheorem{cor}[thm]{Corollary}
+%\newtheorem{prop}[thm]{Proposition}
+%\newtheorem{conj}[thm]{Conjecture}
+
+% These are normal (i.e. not italic).
+\theoremstyle{definition}
+\newtheorem*{ack*}{Acknowledgements}
+\newtheorem*{app*}{Application}
+\newtheorem*{apps*}{Applications}
+\newtheorem{defn}{Definition}
+\newtheorem*{defn*}{Definition}
+\newtheorem{eg}{Example}
+  \makeatletter
+  \@addtoreset{eg}{thm}
+  \makeatother 
+\newtheorem*{eg*}{Example}
+\newtheorem*{egs*}{Examples}
+\newtheorem{ex}{Exercise}
+\newtheorem*{ex*}{Exercise}
+\newtheorem*{quest*}{Question}
+\newtheorem{rem}{Remark}
+\newtheorem*{rem*}{Remark}
+\newtheorem{rems}{Remarks}
+\newtheorem*{rems*}{Remarks}
+\newtheorem{prob}{Problem}
+\newtheorem*{prob*}{Problem}
+\newtheorem*{soln*}{Solution}
+\newtheorem{soln}{Solution}
+
+
+% New Commands: Common Math Symbols
+\providecommand{\R}{\mathbb{R}}%
+\providecommand{\N}{\mathbb{N}}%
+\providecommand{\Z}{{\mathbb{Z}}}%
+\providecommand{\sph}{\mathbb{S}}%
+\providecommand{\Q}{\mathbb{Q}}%
+\providecommand{\C}{{\mathbb{C}}}%
+\providecommand{\F}{\mathbb{F}}%
+\providecommand{\quat}{\mathbb{H}}%
+
+% New Commands: Operators
+\providecommand{\Gal}{\operatorname{Gal}}%
+\providecommand{\GL}{\operatorname{GL}}%
+\providecommand{\card}{\operatorname{card}}%
+\providecommand{\coker}{\operatorname{coker}}%
+\providecommand{\id}{\operatorname{id}}%
+\providecommand{\im}{\operatorname{im}}%
+\providecommand{\diam}{{\rm diam}}%
+\providecommand{\aut}{\operatorname{Aut}}%
+\providecommand{\inn}{\operatorname{Inn}}%
+\providecommand{\out}{{\rm Out}}%
+\providecommand{\End}{{\rm End}}%
+\providecommand{\rad}{{\rm Rad}}%
+\providecommand{\rk}{{\rm rank}}%
+\providecommand{\ord}{{\rm ord}}%
+\providecommand{\tor}{{\rm Tor}}%
+\providecommand{\comp}{{\text{ $\scriptstyle \circ$ }}}%
+\providecommand{\cl}[1]{\overline{#1}}%
+\providecommand{\tr}{{\sf trace}}%
+
+\renewcommand{\tilde}[1]{\widetilde{#1}}%
+\numberwithin{equation}{section}
+
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand*\rfrac[2]{{}^{#1}\!/_{#2}}
+
+% This makes the spacing between lines of font a little bigger.  I like the way it looks.
+\newcommand{\spacing}[1]{\renewcommand{\baselinestretch}{#1}\large\normalsize}
+\spacing{1.2}
+
+% END PREAMBLE %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+\lstset{language=Python}
+
+\title{\Large{579 HW3}}
+\author{Luke Wukmer}
+\date{\today}
+\maketitle \normalsize \thispagestyle{empty} % remove the page number from the first page
+
+%%%%% PROBLEM 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+\begin{prob}
+\end{prob}
+\begin{prob*}[\bf{1a}]
+\end{prob*}
+
+\begin{proof}
+  $f$ convex, so for $ A\vec{w} , A \vec{z} \in \R^{d} $
+  \[
+    f \left(\theta (A \vec{w}) + (1 - \theta) A \vec{z} \right)
+    \; \leq \;
+    \theta f( A \vec{w} ) + (1 - \theta) f( A \vec{z} )
+  \]
+  By linearity of $A$, we can rewrite the left side as
+  \[
+    f \left(A \left[ \theta \vec{w} + (1 - \theta) \vec{z} \right]\right) 
+    \; \leq \;
+    \theta f( A \vec{w} ) + (1 - \theta) f( A \vec{z} )
+  \]
+  Rewriting in terms of $g = f(A\vec(w))$:
+  \[
+    g \left( \theta \vec{w} + (1 - \theta) \vec{z} \right)
+    \; \leq \;
+    \theta g(\vec{w}) + (1 - \theta) g(\vec{z})
+  \]
+  Thus g is convex.
+\qedhere  
+\end{proof}
+%%%% PROBLEM 1B
+%%%%%%%%%%%%%%%%%%%%%%%5
+\begin{prob*}[\bf{1b}]
+\end{prob*}
+
+\begin{proof}
+  \[
+  \begin{aligned}
+    h \left( \theta \vec{x} + (1-\theta) \vec{y} \right)
+    &= \sum \alpha_i f_i \left( \theta \vec{x} + (1-\theta) \vec{y} \right) \\
+    &\leq \sum \alpha_i \left[ \theta f_i( \vec{x})
+                              + (1-\theta) f_i(\vec{y}) \right] \\
+    &= \sum \alpha_i \theta f_i( \vec{x})
+            + \sum \alpha_i (1-\theta) f_i(\vec{y}) \\
+    &= \theta \sum \alpha_i f_i( \vec{x})
+            + (1-\theta) \sum \alpha_i  f_i(\vec{y}) \\
+    &= \theta h(\vec{x}) + (1-\theta) h(\vec{y}) \\
+  \end{aligned}
+  \]
+  where the inequality follows from the fact that $f_i$ are each convex and 
+  $\alpha_i \geq 0$.
+\end{proof}
+\clearpage
+%%%%%% PROBLEM 1C
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{prob*}[\bf{1c}]
+\end{prob*}
+
+\begin{proof}
+  \[
+  \begin{aligned}
+    g(z)   &:= \log(1+e^{z}) \\
+    g'(z)  &= \frac{e^{z}}{1+e^{z}} \\
+    g''(z) &= \frac{ (1+e^{z}) e^{z} - e^{z} (e^{z}) }{(1+e^{z})^2} \\
+           &= \frac{ e^{z} }{ (1+e^{z})^2 } \, \geq \, 0
+                \quad \forall z \in \R \\
+  \end{aligned}
+  \]
+\end{proof}
+
+%%%%%%PROBLEM 1D
+\begin{prob*}[\bf{1d}]
+\end{prob*}
+
+\begin{proof} See attached.
+\end{proof}
+\end{document}
+

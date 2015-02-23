@@ -3,8 +3,10 @@
 \usepackage{amsmath, amsthm, amssymb, amsfonts}
 \usepackage{amsxtra, amscd, geometry, graphicx}
 \usepackage{endnotes}
+\usepackage{cancel}
 %\usepackage[all,cmtip]{xypic}
 \usepackage{mathrsfs}
+\usepackage{listings}
 %\usepackage[pdftex]{hyperref}
 %\usepackage[dvips,bookmarks,bookmarksopen,backref,colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue}](hyperref}
 
@@ -114,13 +116,15 @@
 
 
 \begin{document}
+\lstset{language=Python}
 
-\title{\Large{361B HW2}}
+\title{\Large{579 HW2}}
 \author{Luke Wukmer}
-\date{\today} %to change the date, just put the text you want in place of \today
+\date{February 17, 2015}
 \maketitle \normalsize \thispagestyle{empty} % remove the page number from the first page
 
 %%%%% PROBLEM 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
 \begin{prob}
 Let $\mathbf{x} = ( x_1, x_2, \dots , x_n )^T$ and $f(\bf{x}) = f(x_1, \dots, x_n) : \R^n \rightarrow \R$ denote any differentiable function of $n$ variables.
 
@@ -133,7 +137,6 @@ Let $\mathbf{x} = ( x_1, x_2, \dots , x_n )^T$ and $f(\bf{x}) = f(x_1, \dots, x_
  
 \end{prob}
 
-%%%%% PROBLEM 1 SOLUTION
 \begin{proof}
   Let $f: \R^n \rightarrow \R $ differentiable in $\R^n$. Thus the linear transformation
   $f' ( \mathbf{x} ) \in \mathsf{L} ( \R^n , \R ) $ is completely determined by the partial derivatives w.r.t. $\{x_i\}$
@@ -146,79 +149,162 @@ Let $\mathbf{x} = ( x_1, x_2, \dots , x_n )^T$ and $f(\bf{x}) = f(x_1, \dots, x_
   where $\mathbf{e}_j$ is the $j^{th}$ component of the standard basis for $\R^n$.\\
   
   Fix $\bf{x} \in \R^n$. Then for arbitrary $\bf{y} \in \R^n$ , \quad
-  $\bf{y} = \displaystyle  \sum^{n} y_j \bf{e}_j $
+
   \[
   \begin{aligned}
+    \bf{y} = \sum^{n}{y_j \bf{e}_j} \quad
   \Longrightarrow \quad f'(\mathbf{x}) \, \mathbf{y} \, &= \, f'(\mathbf{x})\left(\sum^{n} y_j \mathbf{e}_j\right)\\
-                                                          &= \, \sum^{n} y_j f'(\mathbf{x}) \mathbf{e}_j\\
-                                                          &= \, \sum^{n} y_j \left(\frac{\partial}{\partial x_j} (\mathbf{x})\right)
-                                                          = \langle \mathbf{y} , (\nabla f) (\mathbf{x}) \rangle \\
-  \end{aligned}
-  \]
-  
-  Now consider $\displaystyle \left(\frac{\mathrm{d}}{\mathrm{d}\epsilon} f(\mathbf{x} + \epsilon \mathbf{y}\right)$.
-  define $\vec{\gamma} : \R \rightarrow \R^n $ by $\vec{\gamma}(\epsilon) = \mathbf{x} + \epsilon \mathbf{y}.$ Then by the chain rule:
-  ...
-  and so
-  \[
-  \begin{aligned}
-  \frac{\mathrm{d}}{\mathrm{d} \epsilon} \left[ f(\mathbf{x} + \epsilon \mathbf{y}) \right] \big|_{\epsilon=0}
-  &= \left[ f(\mathbf{x} + \epsilon \mathbf{y}) \right] \big|_{\epsilon=0} \\
-  &= f'(x) y \\
-  \end{aligned}
-  \]
+    &= \, \sum^{n} y_j f'(\mathbf{x}) \mathbf{e}_j\\
+    &= \, \sum^{n} y_j \left(\frac{\partial}{\partial x_j} (\mathbf{x})\right)
+    = \langle \mathbf{y} , (\nabla f) (\mathbf{x}) \rangle \\
+\end{aligned}
+\]
+
+Now consider $\displaystyle \left(\frac{\mathrm{d}}{\mathrm{d}\epsilon} f(\mathbf{x} + \epsilon \mathbf{y})\right)$.
+Define $\vec{\gamma} : \R \rightarrow \R^n $ by $\vec{\gamma}(\epsilon) = \mathbf{x} + \epsilon \mathbf{y}.$ Then by the chain rule:
+...
+and so
+\[
+\begin{aligned}
+\frac{\mathrm{d}}{\mathrm{d} \epsilon} \left[ f(\mathbf{x} + \epsilon \mathbf{y}) \right] \big|_{\epsilon=0}
+&= \left[ f(\mathbf{x} + \epsilon \mathbf{y}) \right] \big|_{\epsilon=0} \\
+&= f'(x) y \\
+\end{aligned}
+\]
+so that we have the equality
+\[
+\frac{\mathrm{d}}{\mathrm{d} \epsilon} \left[ f(\mathbf{x} + \epsilon \mathbf{y}) \right] \big|_{\epsilon=0}
+= f'(x) y
+= \langle \mathbf{y} , (\nabla f) (\mathbf{x}) \rangle \\
+\]
+\qedhere  
+\end{proof}
+\clearpage
+%%%% PROBLEM 1B
+%%%%%%%%%%%%%%%%%%%%%%%5
+\begin{prob*}[\bf{1b}]
+\end{prob*}
+
+\begin{proof}
+  Suppose $\exists \ \vec{v} \in \R^{n}$ s.t. $\forall \vec{y} \in \R^{n}$,
+ \[
+  \frac{\mathrm{d}}{\mathrm{d} \epsilon} \left[ f(\vec{x} + \epsilon
+  \vec{y}) \right] \big|_{\epsilon=0}
+  = \langle \vec{v} , \vec{y} \rangle
+\]
+
+from part {(a)}, $ \sf{LHS} = \langle \vec{y} , (\nabla f) (\vec{x}) \rangle \\ $
+
+Thus
+\[
+  \forall \vec{y} \in \R^{n} ,
+  \langle \vec{y} , (\nabla f) (\vec{x}) \rangle
+  = \langle \vec{v} , \vec{y} \rangle \\
+  \Rightarrow f'(\vec{x})\ \vec{y} = \langle \vec{v} , \vec{y} \rangle \\
+\]
+so
+\[
+  \forall \vec{y} \in \R^{n},
+  \langle (\nabla f) (\mathbf{x}) , \vec{y} \rangle
+  = \langle \vec{v} , \vec{y} \rangle \\
+  \Longrightarrow 
+  \langle \left((\nabla f) (\mathbf{x}) - \vec{v} \right) , \vec{y} \rangle
+  = 0
+\]
+
+But since true $\forall \ \vec{y} \in \R^{n}$,
+\[
+  \Longrightarrow \quad
+  (\nabla f) (\mathbf{x}) - \vec{v} = 0\\
+  \quad \Longrightarrow \quad
+  (\nabla f) (\mathbf{x}) = \vec{v}\\
+\]
 \end{proof}
 
 %%%%%% PROBLEM 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{prob}
 \end{prob}
 
 \begin{proof}
 \[
-  f(X) := \frac{1}{2}\tr\left((AX-B)^T(AX-B)\right)
+f(X) := \frac{1}{2}\tr\left((AX-B)^T(AX-B)\right)
 \]
 \[
-  \Rightarrow \quad   
-  \left[ \frac{d}{d \epsilon} f(X + \epsilon Y) \right]_{\epsilon=0} 
-  = \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr[ ( A (X+ \epsilon Y ) - B)^T ( A ( X + \epsilon Y ) - B)]\right]_{\epsilon=0} \\
+\Rightarrow \quad   
+\left[ \frac{d}{d \epsilon} f(X + \epsilon Y) \right]_{\epsilon=0} 
+= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr[ ( A (X+ \epsilon Y ) - B)^T ( A ( X + \epsilon Y ) - B)]\right]_{\epsilon=0} \\
 \]
 \[
 \begin{aligned}
-  &= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr[ ( (AX)^T + \epsilon (AY)^T - B^T ) ( AX - \epsilon AY -B ) \right]_{\epsilon=0} \\
-  &= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr\left( \epsilon^2 (AY)^T(AY)
-          + \epsilon (AY)^T (AX-B)
-          + \epsilon (AY) (AX-B)
-          + (AX-B)^T (AX-B) \right)\right]_{\epsilon=0} \\
-  &= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr\left( \epsilon^2 (AY)^T(AY)
-          +  2 \epsilon (AY)^T (AX-B)
-          + (AX-B)^T (AX-B) \right)\right]_{\epsilon=0} \\
-  &= \frac{1}{2} \frac{d}{d \epsilon} \left[ [ \epsilon^2 \ \tr( \, \cdots \, )
-          + 2 \epsilon \ \tr( (AY)^T (AX-B) )
-          + \tr( \, \cdots \, )]\right]_{\epsilon=0} \\
-  &= \frac{1}{2} \left( 2 \epsilon \ \tr( \, \cdots \, ) + 2 \tr( (AY)^T (AX -B)) + 0 \right) \big|_{\epsilon=0} \\
-  &= \tr \left( (AY)^T (AX - B) \right) \\
+&= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr[ ( (AX)^T + \epsilon (AY)^T - B^T ) ( AX - \epsilon AY -B ) \right]_{\epsilon=0} \\
+&= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr\left( \epsilon^2 (AY)^T(AY)
+        + \epsilon (AY)^T (AX-B)
+        + \epsilon (AY) (AX-B)
+        + (AX-B)^T (AX-B) \right)\right]_{\epsilon=0} \\
+&= \frac{1}{2} \frac{d}{d \epsilon} \left[ \tr\left( \epsilon^2 (AY)^T(AY)
+        +  2 \epsilon (AY)^T (AX-B)
+        + (AX-B)^T (AX-B) \right)\right]_{\epsilon=0} \\
+&= \frac{1}{2} \frac{d}{d \epsilon} \left[ [ \epsilon^2 \ \tr( \, \cdots \, )
+        + 2 \epsilon \ \tr( (AY)^T (AX-B) )
+        + \tr( \, \cdots \, )]\right]_{\epsilon=0} \\
+&= \frac{1}{2} \left( 2 \epsilon \ \tr( \, \cdots \, ) + 2 \tr( (AY)^T (AX -B)) + 0 \right) \big|_{\epsilon=0} \\
+&= \tr \left( (AY)^T (AX - B) \right) \\
 \end{aligned}
 \]
 \end{proof}
 
-%%%%%%PROBLEM 3
+%%%%%%PROBLEM 2B
+\begin{prob*}[\bf{2b}]
+\end{prob*}
+
+\begin{proof} See attached.
+%Let $\vec{X}$ be the vectorized form of $X \in \R^{m \times n}$
+%and $f: \R^{m \times n} \rightarrow \R$.
+%(Note that $\R^{m \times n} \cong \R^{mn}$ and thus
+%$f(X) = \tilde{f}(\vec{X})$ in $\R $ for $ \tilde{f}:\R^{mn} \rightarrow \R$,
+%so I can refer to either function as $f$ without issue.)
+%
+%Let $Y \in \R^{m \times n}$ arbitrary
+%and associate $\vec{Y} \in \R^{mn} $ as before.
+\end{proof}
+\clearpage
+
+%%%%% QUESTION 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{prob}
+See attached.
+\end{prob}
+
+%%%%% QUESTION 4
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{prob}
 \end{prob}
 
-%%%%%%PROBLEM 3 SOLUTION
-\begin{proof}
-  Let $\vec{X}$ be the vectorized form of $X \in \R^{m \times n}$
-  and $f: \R^{m \times n} \rightarrow \R$.
-  (Note that $\R^{m \times n} \cong \R^{mn}$ and thus
-  $f(X) = \tilde{f}(\vec{X})$ in $\R $ for $ \tilde{f}:\R^{mn} \rightarrow \R$,
-  so I can refer to either function as $f$ without issue.)
+See attached source code.
+I noticed slight differences in fg/vs background pictures over different values
+of $\lambda$. I noticed higher $\lambda$s resulted in pixels being ``more
+aggressively'' classified as foreground.  
 
-  Let $Y \in \R^{m \times n}$ arbitrary
-  and associate $\vec{Y} \in \R^{mn} $ as before.
-
-  Then
+For example, the branches of the tree, which were kind of bluish in the
+original picture, were entirely classified as background when $\lambda=800$ and
+completely as foreground when $\lambda=.005$. However, this could potentially
+be a rounding error. 
 
 
-\end{proof}
+%%%%%%%%%%%%%%%%QUESTION 5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{prob}
+\end{prob}
+
+Here is the output generated. See attached source code.
+\begin{verbatim}
+% python c2_2.py
+for digits=(1, 6)
+2083 hits out of 2093, 99.52221691352126%
+for digits=(4, 9)
+1924 hits out of 1991, 96.63485685585133%
+% \dots
+\end{verbatim}
 
 \end{document}
