@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 ## TODO
+##  -   again, filenames are hardcoded. fix
 ##  -   just pickle the datasets in matrix form. way easier     
 ##  -   correct output
 ##  -   finish switch
@@ -48,20 +49,22 @@ def _int_array_from_file(filename, dtype=None, sep=None):
 
     # will be in the same orientation as the file now.
     return flat.reshape((-1, cols))
-    
+
 def load_20_news(groups, subset):
     """
     Parameters
     ----------
 
-    groups: i don't know
+    groups: a sequence of integers 1-20, specifying which groups of 'articles'
+            to load
 
-    subset:   a label. must be in ('test', 'train', 'all')
+    subset: a label. must be in ('test', 'train', 'all'), which sets of data to
+            pull these 'articles' from
 
     Returns
     -------
 
-    docs:
+    docs    data set
 
     lab:
 
@@ -88,15 +91,13 @@ def load_20_news(groups, subset):
 
         docs = numpy.concatenate((X1,X2), axis=0)
         lab = numpy.concatenate((T1,T2), axis=0)
-        #docs = [X1; X2];
-        #lab = [T1;T2];
     else
         raise Exception("subset must be 'train', 'test', or 'all'")
 
-    # separate columns
+    # now separate columns
     iv, jv, vv = docs.T
     
-    # literally just copying the matlab here :/ csc_matrix is one of apparently
+    # literally just copying matlab here :/ csc_matrix is one of apparently
     # 7 ways that scipy.sparse can create a sparse matrix; this is the one
     # matlab uses. not sure why we're getting the shape this way.
     #docs = sparse(iv,jv,vv,max(iv),61188);
@@ -106,9 +107,12 @@ def load_20_news(groups, subset):
     #docs = docs( sum(idx,2) == 1 , :);
     #lab = lab( sum(idx,2) == 1 );
     #
-    #fid = fopen('_vocabulary.txt');
-    #vocab = textscan(fid,'%s');
-    #fclose(fid);
+    
+    # BUILD VOCAB
+    with open('_vocabulary.txt') as f:
+        vocab = [line.strip() for line in f] 
+
+    # what does this line do? resolve dim?
     #vocab = vocab{1};
         
     return docs, lab, vocab
