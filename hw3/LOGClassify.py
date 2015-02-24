@@ -40,6 +40,22 @@ def log_classify(X, y, λ):
 
     return α, β
 
+def _get_v(α, β, X, y):
+    """
+    returns v1, v2. see class notes.
+    """
+
+    z = α + X.dot(β)
+
+    # assuming it's faster to compute these once
+    z1 = numpy.exp(z)
+    z2 = numpy.exp(-z)
+
+    # see class notes
+    v1 = (z1 * (1 - y)) / (1 + z1) 
+    v2 = (z2 * y) / (1 + z2)
+    return v1, v2
+
 def gradient(α, β, X, y, λ):
     """
     returns p, gradient
@@ -49,18 +65,9 @@ def gradient(α, β, X, y, λ):
     # p[0] should be the derivative of E w.r.t. α
     # p[1:end] should be gradient of E w.r.t. β
 
-    z = α + X.dot(β)
-
-    # assuming it's faster to compute these once
-    v1 = numpy.exp(z)
-    v2 = numpy.exp(-z)
-    
-    # see class notes
-    v1 = (v1 * (1 - y)) / (1 + v1)
-    v2 = (v2 * y) / (1 + v2)
+    v1, v2 = _get_v(α, β, X, y) 
 
     v = v1 - v2
-
     p[0] = v.sum()
     p[1:] = numpy.dot(X.T, v) + λ*β
     
@@ -92,5 +99,8 @@ def line_search(dt, p, α, β, X, y, λ):
 def log_energy(α, β, X, y, λ):
     
     # compute E
+    v1, v2 = _get_v(α, β, X, y) 
+    
+    E = v1.sum() + v2.sum() + .5*λ * numpy.dot(β.T, β) 
 
     return E
