@@ -26,14 +26,14 @@ def log_classify(X, y, λ):
         p = gradient(α, β, X, y, λ)
         dt = line_search(dt, p, α, β, X, y, λ)
 
-        # update alpha, beta
-        # α, β = 
+        α = α - (dt * p[0])
+        β = β - (dt * p[1:])
 
         if (norm(p) < TOL):
             print("tolerance reached")
             flag = True
         elif (iter > itmax):
-            print("too many iterations, abort")
+            print("max iterations reached")
             flag = True
         else:
             pass # continue
