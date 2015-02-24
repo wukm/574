@@ -12,8 +12,9 @@ load20NEWS.py
 This is a port of the provided load20NEWS.m
 """
 
+import os.path
 import numpy
-import from scipy import sparse
+from scipy import sparse
 
 def _int_array_from_file(filename, dtype=None, sep=None):
     """
@@ -50,7 +51,7 @@ def _int_array_from_file(filename, dtype=None, sep=None):
     # will be in the same orientation as the file now.
     return flat.reshape((-1, cols))
 
-def load_20_news(groups, subset):
+def load_20_news(groups, subset, filepath='./data/20NEWS/'):
     """
     Parameters
     ----------
@@ -70,19 +71,24 @@ def load_20_news(groups, subset):
 
     vocab:
     """
+    # yuck
+    test_files = (os.path.join(filepath, 'test.data'),
+                    os.path.join(filepath, 'test.label'))
+    train_files = (os.path.join(filepath, 'train.data'),
+                    os.path.join(filepath, 'train.label'))
+
     # i really hate these switch statements, but what do?
     if subset == 'test':
-        docs = _int_array_from_file('test.data') 
-        lab = _int_array_from_file('test.label')  
+        docs = _int_array_from_file(test_files[0]) 
+        lab = _int_array_from_file(test_files[1])
     elif subset == 'train':
-        docs = _int_array_from_file('train.data') 
-        lab = _int_array_from_file('train.label')
+        docs = _int_array_from_file(train_files[0])
+        lab = _int_array_from_file(train_files[1])
     elif subset == 'all': 
-        elif subset == 'all':
-        X1 = _int_array_from_file('test.data') 
-        X2 = _int_array_from_file('test.data') 
-        T1 = _int_array_from_file('train.label')  
-        T2 = _int_array_from_file('train.label')  
+        X1 = _int_array_from_file(test_files[0])
+        X2 = _int_array_from_file(train_files[0])
+        T1 = _int_array_from_file(test_files[1])
+        T2 = _int_array_from_file(train_files[1])
 
         # the first column of each of the 'X' sets is an index.
         # this just offsets the index in X2 by the size of X1 so that the
@@ -91,28 +97,33 @@ def load_20_news(groups, subset):
 
         docs = numpy.concatenate((X1,X2), axis=0)
         lab = numpy.concatenate((T1,T2), axis=0)
-    else
+    else:
         raise Exception("subset must be 'train', 'test', or 'all'")
 
-    # now separate columns
-    iv, jv, vv = docs.T
-    
-    # literally just copying matlab here :/ csc_matrix is one of apparently
-    # 7 ways that scipy.sparse can create a sparse matrix; this is the one
-    # matlab uses. not sure why we're getting the shape this way.
-    #docs = sparse(iv,jv,vv,max(iv),61188);
-    docs = sparse.csc_matrix((vv, (iv,jv)), shape=(iv.max(), 61188))
 
-    #idx = bsxfun(@eq,lab,groups);
-    #docs = docs( sum(idx,2) == 1 , :);
-    #lab = lab( sum(idx,2) == 1 );
-    #
+    # this whole thing is equivalent to the following:
+    # for i in len(vv):
+    #   put v[i] in the (iv[i], jv[i]) th place in the sparse matrix
+
+    iv, jv, vv = docs.T
+   
+    # python is zero-indexed. which is errant.
+    iv, jv = iv - 1, jv - 1
+
+    # matlab does csc matrices
+    # not sure why we're getting the shape this way.
+    # docs = sparse(iv,jv,vv,max(iv),61188);
+    docs = sparse.csc_matrix((vv, (iv,jv)), shape=(iv.max()+1, 61188))
+    
+    idx = group == lab
+    idx = idx.sum(axis=1) == 1
+    docs = docs[idx, :]
+    lab = lab[idx] 
     
     # BUILD VOCAB
     with open('_vocabulary.txt') as f:
         vocab = [line.strip() for line in f] 
+    
+    vocab = numpy.array(vocab)
 
-    # what does this line do? resolve dim?
-    #vocab = vocab{1};
-        
     return docs, lab, vocab
