@@ -1,0 +1,33 @@
+--------------------------------------------------------------------------------
+λ = 1.0
+final energy with λ=1.0 was E=53.94825829336974
+accuracy with λ=1.0 was 734/796 = 92.21105527638191
+
+words found from group 10:
+hockey nhl playoff penguins need beat cup playoffs wings ca
+
+words found from group 11:
+pitching cubs anyone stadium sox up nl runs phillies baseball
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+λ = 10.0
+final energy with λ=10.0 was E=169.8301683152322
+accuracy with λ=10.0 was 730/796 = 91.70854271356784
+
+words found from group 10:
+hockey nhl playoff ca cup penguins playoffs wings pens espn
+
+words found from group 11:
+yankees mets nl stadium pitching sox up phillies runs baseball
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+λ = 100.0
+final energy with λ=100.0 was E=389.1747605791561
+accuracy with λ=100.0 was 709/796 = 89.07035175879398
+
+words found from group 10:
+hockey ca nhl cup leafs playoffs go wings pens will
+
+words found from group 11:
+braves sox mets hit pitching up phillies edu runs baseball
+--------------------------------------------------------------------------------

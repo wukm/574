@@ -1,0 +1,3 @@
+λ=0.005	final energy is 18.803242244493468
+λ=0.05	final energy is 103.19933881689258
+λ=0.5	final energy is 481.6992911373476
