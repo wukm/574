@@ -19,7 +19,7 @@ def log_classify(X, y, λ, dt0=.001):
     if len(y.shape) == 1:
         numpy.expand_dims(y, axis=0)
 
-    alpha, beta = 0, numpy.zeros(X.shape[1])
+    alpha, beta = 0, numpy.zeros((X.shape[1],1))
 
     flag, dt, it, TOL, itmax = False, dt0, 1, .001, 20000
 
@@ -46,8 +46,8 @@ def log_classify(X, y, λ, dt0=.001):
             print("max iterations reached")
             break
         else:
-            #if not it % 100:
-            #    print('{} iterations...'.format(it))
+            if not it % 100:
+                print('{} iterations...'.format(it))
             continue
     
 
@@ -75,7 +75,7 @@ def gradient(alpha, beta, X, y, λ):
     """
     returns p, gradient
     """
-    p = numpy.zeros((beta.shape[0] +1))
+    p = numpy.zeros((beta.shape[0] +1, 1))
 
     # p[0] should be the derivative of E w.r.t. α
     # p[1:end] should be gradient of E w.r.t. β

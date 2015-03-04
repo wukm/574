@@ -115,13 +115,14 @@ def load_20_news(groups, subset, filepath='./data/20NEWS/'):
     # docs = sparse(iv,jv,vv,max(iv),61188);
     docs = sparse.csc_matrix((vv, (iv,jv)), shape=(iv.max()+1, 61188))
     
-    idx = group == lab
+    idx = groups == lab
     idx = idx.sum(axis=1) == 1
     docs = docs[idx, :]
     lab = lab[idx] 
     
     # BUILD VOCAB
-    with open('_vocabulary.txt') as f:
+    vocab_file = os.path.join(filepath, '_vocabulary.txt')
+    with open(vocab_file) as f:
         vocab = [line.strip() for line in f] 
     
     vocab = numpy.array(vocab)
