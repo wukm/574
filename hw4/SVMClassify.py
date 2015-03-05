@@ -10,7 +10,7 @@ import numpy
 from scipy.linalg import norm
 from PROJECT import project
 
-def log_classify(X, y, C):
+def svm_classify(X, y, C):
     """
     input X, y, C
     returns γ
@@ -20,7 +20,7 @@ def log_classify(X, y, C):
     gradient descent w/ log functions
     """
 
-    # HOLY SHIT THIS IS SO IMPORTANT
+    # please get to the bottom of the dimensionality issues from before
     if len(y.shape) == 1:
         numpy.expand_dims(y, axis=0)
 
@@ -38,7 +38,7 @@ def log_classify(X, y, C):
 
         gamma_new, gamma = project(gamma - dt*p, y, C), gamma_new
 
-        E = log_energy(alpha, beta, X, y, λ)
+        E = _energy(alpha, beta, X, y, λ)
 
         q = (gamma - gamma_new) / dt
         if (norm(q) < TOL):
@@ -55,6 +55,7 @@ def gradient(alpha, beta, X, y, λ):
     """
     returns p, gradient
     """
+    # do it in two steps, might save memory?
     p = X.T.(gamma)
     p = X.dot(p) - y
 
@@ -68,31 +69,28 @@ def line_search(dt, p, gamma, X, y, λ):
     dt = 2.0 * dt
     
     gamma_new = gamma
-    E0 = log_energy(gamma, X, y, C)
-    #ls_count = 1
+    E0 = _energy(gamma, X, y, C)
 
     while True:
         gamma_new = project(gamma - dt*p)
 
-        E1 = log_energy(gamma_new, X, y, C)
+        E1 = _energy(gamma_new, X, y, C)
 
         if E0 >= E1 + .001 * (gamma - gamma_new).dot(gamma - gamma_new)
             return dt
         else:
             dt = dt/2  # take a smaller timestep and try again
-            #ls_count+=1
 
-    #print("energy after line search:{}".format(E1))
-    #print("...iterations in line search:{}".format(ls_count))
-
-def log_energy(gamma, X, y, λ):
+def _energy(gamma, X, y, C):
     """ 
-    compute E
+    compute E(γ) = ½ < γ , X(X^T)γ > - < γ, y >
     """
-    z = alpha + X.dot(beta)
-    v1 = numpy.log(1+numpy.exp(z)) * (1-y)
-    v2 = numpy.log(1+numpy.exp(-z)) * y
-    
-    E = v1.sum() + v2.sum() + .5*λ * numpy.dot(beta.T, beta) 
+    # build first term over multiple steps. idk if this is really more memory
+    # efficent, but that was what was recommended in gradient. try it out?
+    first = (X.T).dot(gamma)
+    first = X.dot(first)
+    first = gamma.dot(first) / 2
 
-    return E
+    second = gamma.dot(y) 
+    
+    return first - second
