@@ -3,7 +3,7 @@
 SVMClassify.py
 reworking LOGClassify.py to do SVM
 
-yup.
+probably bugs, but this is trying to be straightforward
 """
 
 import numpy
@@ -21,10 +21,10 @@ def svm_classify(X, y, C):
     """
 
     # please get to the bottom of the dimensionality issues from before
-    if len(y.shape) == 1:
-        numpy.expand_dims(y, axis=0)
+    #if len(y.shape) == 1:
+    #    numpy.expand_dims(y, axis=0)
 
-    gamma_new = numpy.zeros(X.shape[0], 1)
+    gamma = numpy.zeros(X.shape[0], 1)
 
     dt, TOL, itmax = .001, .001, 20000
     it = 1
@@ -33,30 +33,28 @@ def svm_classify(X, y, C):
         
         it += 1
 
-        p = gradient(alpha, beta, X, y, λ)
-        dt = line_search(dt, p, alpha, beta, X, y, λ)
+        p = gradient(gamma, X, y)
+        dt = line_search(dt, p, gamma, X, y, C)
 
-        gamma_new, gamma = project(gamma - dt*p, y, C), gamma_new
+        gamma_new = project(gamma - dt*p, y, C)
 
-        E = _energy(alpha, beta, X, y, λ)
+        q = (gamma_new - gamma) / dt
 
-        q = (gamma - gamma_new) / dt
         if (norm(q) < TOL):
             break
         elif (it > itmax):
             break
         else:
-            continue
-    
+            gamma = gamma_new
 
     return gamma_new
 
-def gradient(alpha, beta, X, y, λ):
+def gradient(gamma, X, y):
     """
-    returns p, gradient
+    grad(E(γ)) = X(X^T)γ - y
     """
     # do it in two steps, might save memory?
-    p = X.T.(gamma)
+    p = X.T.dot(gamma)
     p = X.dot(p) - y
 
     return p
@@ -68,22 +66,22 @@ def line_search(dt, p, gamma, X, y, λ):
     # see class notes
     dt = 2.0 * dt
     
-    gamma_new = gamma
-    E0 = _energy(gamma, X, y, C)
+    # initial energy and initial gamma do not change throughout
+    E = _energy(gamma, X, y, C)
 
     while True:
         gamma_new = project(gamma - dt*p)
 
-        E1 = _energy(gamma_new, X, y, C)
+        E_new = _energy(gamma_new, X, y, C)
 
-        if E0 >= E1 + .001 * (gamma - gamma_new).dot(gamma - gamma_new)
+        if E >= E_new + .001 * (gamma - gamma_new).dot(gamma - gamma_new)
             return dt
         else:
             dt = dt/2  # take a smaller timestep and try again
 
 def _energy(gamma, X, y, C):
     """ 
-    compute E(γ) = ½ < γ , X(X^T)γ > - < γ, y >
+    E(γ) = ½ <γ, X(X^T)γ> - <γ, y>
     """
     # build first term over multiple steps. idk if this is really more memory
     # efficent, but that was what was recommended in gradient. try it out?
