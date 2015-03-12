@@ -17,8 +17,8 @@ def project(x,y,C):
     using Dykstra's alternating projection algorithm
     """
 
-    p = np.zeros(x.shape[0], 1)
-    q = np.zeros(x.shape[0], 1)
+    p = np.zeros((x.shape[0], 1))
+    q = np.zeros((x.shape[0], 1))
 
     tol = 1e-15 
     while True:
@@ -32,7 +32,7 @@ def project(x,y,C):
         x = _proj_d((z+q), y, C)
         q = z + q - x
 
-        nrm = (p - p_old).dot(p - p_old) + (q - q_old).dot(q - q_old)
+        nrm = (p - p_old).T.dot(p - p_old) + (q - q_old).T.dot(q - q_old)
 
         if nrm < tol:
             break

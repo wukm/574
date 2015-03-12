@@ -24,7 +24,7 @@ def svm_classify(X, y, C):
     #if len(y.shape) == 1:
     #    numpy.expand_dims(y, axis=0)
 
-    gamma = numpy.zeros(X.shape[0], 1)
+    gamma = numpy.zeros((X.shape[0], 1))
 
     dt, TOL, itmax = .001, .001, 20000
     it = 1
@@ -59,7 +59,7 @@ def gradient(gamma, X, y):
 
     return p
 
-def line_search(dt, p, gamma, X, y, λ):
+def line_search(dt, p, gamma, X, y, C):
     """
     returns dt
     """
@@ -70,11 +70,11 @@ def line_search(dt, p, gamma, X, y, λ):
     E = _energy(gamma, X, y, C)
 
     while True:
-        gamma_new = project(gamma - dt*p)
+        gamma_new = project(gamma - dt*p, y, C)
 
         E_new = _energy(gamma_new, X, y, C)
 
-        if E >= E_new + .001 * (gamma - gamma_new).dot(gamma - gamma_new)
+        if E >= E_new + .001 * (gamma - gamma_new).T.dot(gamma - gamma_new):
             return dt
         else:
             dt = dt/2  # take a smaller timestep and try again
@@ -87,8 +87,8 @@ def _energy(gamma, X, y, C):
     # efficent, but that was what was recommended in gradient. try it out?
     first = (X.T).dot(gamma)
     first = X.dot(first)
-    first = gamma.dot(first) / 2
+    first = gamma.T.dot(first) / 2
 
-    second = gamma.dot(y) 
+    second = gamma.T.dot(y) 
     
     return first - second
