@@ -15,7 +15,7 @@ X, y = d['X'], d['y']
 
 to_write = []
 
-for C in [.1, 1., 10., 100.]:
+for C in [.1, 1., 10., 100., numpy.inf]:
 
     gamma = svm_classify(X, y, C)
     beta = numpy.dot(X.T, gamma)
@@ -33,9 +33,18 @@ for C in [.1, 1., 10., 100.]:
     to_write.append("C={}".format(C))
     to_write.append("α={}".format(alpha))
     to_write.append("β={}".format( beta.flatten()))
-    to_write.append('\n')
+   
+    z = y * (alpha + X.dot(beta)) 
 
+    valid = (z >= 1).sum()
+    frac_valid = valid / z.size
+
+    to_write.append("satisfied {} out of {} (= {}%) constraints".format(valid,
+        z.size, frac_valid))
+
+    to_write.append('\n')
+    
 lines = '\n'.join(to_write)
 
-with open('c4_1c.txt', 'w') as f:
+with open('c4_1.txt', 'w') as f:
     f.write(lines)
