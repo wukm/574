@@ -59,4 +59,10 @@ y = 2*y - 1
 C = 7.5
 gamma = kernel_classify(M, y, C)
 
+# classifying step
+supp = (0 < abs(gamma)) & (abs(gamma) < C)
+
+s = numpy.nonzero(supp)[0]
+
+alpha = (y[s] - X[s].dot(beta)).sum() / s.size
 
