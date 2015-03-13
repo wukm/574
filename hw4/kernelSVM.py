@@ -10,7 +10,7 @@ import numpy
 from scipy.linalg import norm
 from PROJECT import project
 
-def kernel_classify(M, y, C):
+def kernel_classify(M, y, C, tol=.001):
     """
     input M, y, C
     returns γ
@@ -26,7 +26,7 @@ def kernel_classify(M, y, C):
 
     gamma = numpy.zeros((M.shape[0], 1))
 
-    dt, TOL, itmax = .001, .001, 20000
+    dt, itmax = .001, 20000
     it = 1
 
     while True:
@@ -40,7 +40,7 @@ def kernel_classify(M, y, C):
 
         q = (gamma_new - gamma) / dt
 
-        if (norm(q) < TOL):
+        if (norm(q) < tol):
             break
         elif (it > itmax):
             break
