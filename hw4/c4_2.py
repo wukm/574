@@ -11,7 +11,7 @@ import os.path
 from PROJECT import project 
 from kernelSVM import kernel_classify
 from loadMNIST import load as load_mnist
-from SVMclassify import svm_classify
+from SVMClassify import svm_classify
 import numpy
 
 
@@ -86,12 +86,17 @@ d = loadmat(matfile)
 img, lab = d['img'], d['lab']
 
 # use σ=5 because that's what the doctor said
-M = _make_gaussian_kernel(img, 5)
+# this loop takes 5 seconds
+try:
+    M = numpy.load('c4_2_gaussM.pickle')
+except FileNotFoundError:
+    M = _make_gaussian_kernel(img, 5)
+    M.dump('c4_2_gaussM.pickle')
 
 # y contains class labels with y_i = {  1   x_i corresponds to a 9
 #                                    { -1   else
 y = (lab == 9).astype('double')
-y = 2*y - 1 
+y = 2*y - 1     # normalize to class labels {-1, 1}
 
 C = 7.5
 gamma = kernel_classify(M, y, C)
@@ -103,19 +108,31 @@ s = numpy.nonzero(supp)[0]
 v = M.dot(gamma)
 alpha = (y[s] - v[s]).sum() / s.size
 
+# training portion is done now --- we have alpha and beta.
+
 img_t, lab_t = load_mnist([4,7,9], 'test')
-binary = numpy.array(lab_t, ndmin=2).T
+lab_t = numpy.array(lab_t)
+binary = numpy.array((lab_t == 9), ndmin=2).T  # again, make it a column vector
 
 #N = _make_gaussian_N(img_t, img, sigma=5)
 
 # make N ... i'm resorting to list comp because the dimensions are bad ...
 sigma = 5
-N =  [[ (zi - xj).T.dot(zi - xj) / (2 * sigma**2) for xj in img] for zi in binary]
-N = numpy.array(N)
 
-binary_est = alpha + N.dot(gamma) > 0
+# FORMING N THIS WAY TAKES ABOUT 45 SECONDS
+try:
+    N = numpy.load('c4_2_gaussN.pickle')
+except FileNotFoundError:
+    N =  [[ (zi - xj).T.dot(zi - xj) / (2 * sigma**2) for xj in img] for zi in binary]
+    N = numpy.array(N)
+    N.dump('c4_2_gaussN.pickle')
+
+binary_est = (alpha + N.dot(gamma)) > 0
+
+accuracy = binary_est.sum() / binary_est.size
 
 
-# do it without classification trick
-mma = svm_classify(img, y, 7.5)
+# DEBUG
+print("alpha", alpha)
+print("accuracy", accuracy)
 
