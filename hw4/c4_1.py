@@ -46,5 +46,5 @@ for C in [.1, 1., 10., 100., numpy.inf]:
     
 lines = '\n'.join(to_write)
 
-with open('c4_1.txt', 'w') as f:
+with open('c4_1.log', 'w') as f:
     f.write(lines)

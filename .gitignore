@@ -1,8 +1,9 @@
 #   ~/.gitignore
 #   hopefully this isn't too aggressive matching-wise :)
 
-# no pickles
+# no pickles or log outputs
 **/*.pickle
+**/*.log
 
 # no PDFs
 **/*.pdf
