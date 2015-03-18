@@ -10,7 +10,7 @@ import numpy
 from scipy.linalg import norm
 from PROJECT import project
 
-def svm_classify(X, y, C):
+def svm_classify(X, y, C, tol=.001, dt=.001):
     """
     input X, y, C
     returns γ
@@ -26,7 +26,7 @@ def svm_classify(X, y, C):
 
     gamma = numpy.zeros((X.shape[0], 1))
 
-    dt, TOL, itmax = .001, .001, 20000
+    dt, TOL, itmax = dt, tol, 20000
     it = 1
 
     while True:

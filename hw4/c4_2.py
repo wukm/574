@@ -136,3 +136,8 @@ accuracy = binary_est.sum() / binary_est.size
 print("alpha", alpha)
 print("accuracy", accuracy)
 
+gamma2 = svm_classify(img, y, C=7.5, tol=.03, dt=.001)
+beta = img.T.dot(gamma2)
+supp2 = (0 < abs(gamma2)) & (abs(gamma2) < C)
+s2 = numpy.nonzero(supp)[0]
+
