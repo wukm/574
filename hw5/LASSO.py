@@ -15,6 +15,7 @@ also known as the 'lasso problem'
 
 import numpy
 from itertools import count
+from scipy.linalg import norm
 
 def prox(z, λ, dt):
     """
@@ -49,7 +50,7 @@ def lasso_energy(x, A, b, λ):
     # from scipy.linalg import norm
     #return λ + norm(x, ord=1) + .5 * norm(A.dot(x) - b, ord=2)
 
-    return λ * sum(abs(x)) + .5 * (A.dot(x) - b).dot(A.dot(x) - b)
+    return λ * sum(abs(x)) + .5 * (A.dot(x) - b).T.dot(A.dot(x) - b)
     
 def lasso_gradient(x, A, b):
     """
@@ -136,7 +137,7 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
 
         q = (x_new - x) / dt
 
-        if (norm(q) < TOL):
+        if (norm(q) < tol):
             break
         else:
             x = x_new
