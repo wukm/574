@@ -48,7 +48,7 @@ def lasso_gradient(x, A, b):
 
     return A.T.dot(A.dot(x) - b)
 
-def line_search(dt, p, x, A, b, C):
+def line_search(dt, p, x, A, b, λ):
     """
     returns dt
     """
@@ -56,12 +56,12 @@ def line_search(dt, p, x, A, b, C):
     dt = 2.0 * dt
     
     # initial energy and initial gamma do not change throughout
-    E = lasso_energy(x, A, b, C)
+    E = lasso_energy(x, A, b, λ)
 
     while True:
-        gamma_new = project(x - dt*p, b, C)
+        x_new = project(x - dt*p, λ, dt)
 
-        E_new = _energy(x_new, X, b, C)
+        E_new = lasso_energy(x_new, X, b, λ)
 
         if E >= E_new + .001 * (x- x_new).T.dot(x - x_new):
             return dt
@@ -79,8 +79,8 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
     # check out my fancy trick! 
     for i in count():
         
-        p = gradient(x, A, b)
-        dt = line_search(dt, p, gamma, A, b, C)
+        p = lasso_gradient(x, A, b)
+        dt = line_search(dt, p, x, A, b, λ)
 
         x_new = prox((x - dt*p), λ, dt)
 
@@ -91,6 +91,6 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
         else:
             x = x_new
     
-    #print("done in {} iterations".format(i))
+    print("done in {} iterations".format(i))
 
     return x_new

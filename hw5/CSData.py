@@ -20,11 +20,12 @@ def cs_data(m, n, s):
     
     A = A[rows]
 
-    x_ex = numpy.zeros((n,1))
+    x_ex = zeros((n,1))
     inds = sample(range(n), s)
     x_ex[inds] = randn(s,1)
 
-    return A.dot(x_ex)
+    b = A.dot(x_ex)
+    return A, b, x_ex
     
     
     
