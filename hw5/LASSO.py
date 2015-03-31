@@ -31,8 +31,8 @@ def prox(z, λ, dt):
 
     c = λ * dt
     
-    return (z - c) * (z - c > 0) + (z + c) * (z + c < 0)
-
+    m =  (z - c) * ((z - c) > 0) + (z + c) * ((z + c) < 0)
+    return m
 
 def lasso_energy(x, A, b, λ):
     """
@@ -48,8 +48,8 @@ def lasso_energy(x, A, b, λ):
     """
     # alernatively:
     # from scipy.linalg import norm
-    #return λ + norm(x, ord=1) + .5 * norm(A.dot(x) - b, ord=2)
 
+    #return λ * norm(x, ord=1) + .5 * norm(A.dot(x) - b, ord=2)**2
     return λ * sum(abs(x)) + .5 * (A.dot(x) - b).T.dot(A.dot(x) - b)
     
 def lasso_gradient(x, A, b):
@@ -67,7 +67,8 @@ def lasso_gradient(x, A, b):
     output in R^(n,1)
     """
 
-    return A.T.dot(A.dot(x) - b)
+    return (A.dot(x)-b).T.dot(A.dot(x) - b)
+    #return .5*(norm(A.dot(x) - b)**2)
 
 def line_search(dt, p, x, A, b, λ):
     """
@@ -136,12 +137,16 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
         x_new = prox((x - dt*p), λ, dt)
 
         q = (x_new - x) / dt
-
+        #print(norm(q))
         if (norm(q) < tol):
             break
         else:
             x = x_new
+            #if not i % 100:
+            #    print("{} iterations and norm(x_new - x0)/dt = {}".format(i,
+            #        norm(q)))
     
-    #print("done in {} iterations".format(i))
+    print("done in {} iterations".format(i))
+    print("norm(q)={} < tol={}".format(norm(q), tol))
 
     return x_new
