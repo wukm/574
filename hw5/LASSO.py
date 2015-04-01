@@ -31,7 +31,7 @@ def prox(z, λ, dt):
 
     c = λ * dt
     
-    m =  (z - c) * ((z - c) > 0) + (z + c) * ((z + c) < 0)
+    m =  (z - c)*((z - c) > 0).astype('d') + (z + c)*((z + c) < 0).astype('d')
     return m
 
 def lasso_energy(x, A, b, λ):
@@ -46,11 +46,8 @@ def lasso_energy(x, A, b, λ):
 
     output in R
     """
-    # alernatively:
-    # from scipy.linalg import norm
-
-    #return λ * norm(x, ord=1) + .5 * norm(A.dot(x) - b, ord=2)**2
-    return λ * sum(abs(x)) + .5 * (A.dot(x) - b).T.dot(A.dot(x) - b)
+    return λ*norm(x, ord=1) + .5 * (norm(A.dot(x) - b, ord=2)**2)
+    #return λ * sum(abs(x)) + .5 * (A.dot(x) - b).T.dot(A.dot(x) - b)
     
 def lasso_gradient(x, A, b):
     """
@@ -67,8 +64,7 @@ def lasso_gradient(x, A, b):
     output in R^(n,1)
     """
 
-    return (A.dot(x)-b).T.dot(A.dot(x) - b)
-    #return .5*(norm(A.dot(x) - b)**2)
+    return A.T.dot(A.dot(x) - b)
 
 def line_search(dt, p, x, A, b, λ):
     """
@@ -79,7 +75,7 @@ def line_search(dt, p, x, A, b, λ):
     # see class notes
     dt = 2.0 * dt
     
-    # initial energy and initial gamma do not change throughout
+    # initial energy and initial x do not change
     E = lasso_energy(x, A, b, λ)
 
     while True:
@@ -87,10 +83,10 @@ def line_search(dt, p, x, A, b, λ):
 
         E_new = lasso_energy(x_new, A, b, λ)
 
-        if E >= E_new + .001 * (x - x_new).T.dot(x - x_new):
+        if E >= (E_new + .001 * (x - x_new).T.dot(x - x_new)):
             return dt
         else:
-            dt = dt/2  # take a smaller timestep and try again
+            dt = dt/2.  # take a smaller timestep and try again
 
 def lasso(A, b, λ, dt=.001, tol=.000001):
     """
@@ -124,7 +120,8 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
 
     assert b.shape == (A.shape[0], 1), '''
         dimension problem, please pass input b as a column vector.'''
-
+    
+    
     # initial guess is zero in R^n
     x = numpy.zeros((A.shape[1], 1))
     
@@ -137,14 +134,12 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
         x_new = prox((x - dt*p), λ, dt)
 
         q = (x_new - x) / dt
-        #print(norm(q))
         if (norm(q) < tol):
             break
         else:
             x = x_new
-            #if not i % 100:
-            #    print("{} iterations and norm(x_new - x0)/dt = {}".format(i,
-            #        norm(q)))
+            if i > 0 and not i % 100:
+                print("i={}\tnorm(q)={}\tdt={}".format(i,norm(q),dt))
     
     print("done in {} iterations".format(i))
     print("norm(q)={} < tol={}".format(norm(q), tol))
