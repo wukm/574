@@ -19,19 +19,25 @@ from scipy.linalg import norm
 
 def prox(z, λ, dt):
     """
-    λ parameter
-    dt step
-    z a vector (row or column)
+    λ:  parameter
+    dt: step
+    z:  a vector (row or column)
     
-    outputs a solution to
+    output:
+    a vector m (m.shape == z.shape), the solution to solution to
         min { dt*λ||x||_1 + 1/2 (||x-z||_2)^2 | x in R^n }
-    using fancy tricks. output is same shape as input z
+
+    the analytical solution is given by component-wise by
+    
+    m_i =  {    z_i - λ(dt)     if z_i > λ(dt)
+           {    0               if -λ(dt) <= z_i <= λ(dt)
+           {    z_i + λ(dt)     if z_i > λ(dt)
 
     """
 
     c = λ * dt
     
-    m =  (z - c)*((z - c) > 0).astype('d') + (z + c)*((z + c) < 0).astype('d')
+    m =  (z - c)*((z - c) > 0) + (z + c)*((z + c) < 0)
     return m
 
 def lasso_energy(x, A, b, λ):
@@ -130,20 +136,27 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
     x = numpy.zeros((A.shape[1], 1), dtype='float64')
     
     # check out my fancy trick! 
+
+    p = lasso_gradient(x, A, b)
+    dt = line_search(dt, p, x, A, b, λ)
+
     for i in count():
         
-        p = lasso_gradient(x, A, b)
-        dt = line_search(dt, p, x, A, b, λ)
-
         x_new = prox((x - dt*p), λ, dt)
 
         q = (x - x_new) / dt
+
+        if i > 0 and not i % 100:
+            print("i={}\tnorm(q)={}\tdt={}".format(i,norm(q),dt))
+
+
         if (norm(q) < tol):
             break
         else:
             x = x_new
-            if i > 0 and not i % 100:
-                print("i={}\tnorm(q)={}\tdt={}".format(i,norm(q),dt))
+            p = lasso_gradient(x, A, b)
+            dt = line_search(dt, p, x, A, b, λ)
+
     
     print("done in {} iterations".format(i))
     print("norm(q)={} < tol={}".format(norm(q), tol))
