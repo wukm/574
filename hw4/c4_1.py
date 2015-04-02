@@ -2,37 +2,16 @@
 
 """
 using SVM to find a separating hyperplane
+"""
 from scipy.io import loadmat
 import os.path
 from SVMClassify import svm_classify
+from util import gamma_to_hyperplane
 import numpy
 
 # question 3b -- loading synthetic data 
 DATADIR = './data/SYNTHETIC/'
 matfile = os.path.join(DATADIR, 'SYNTHETIC.mat')
-
-def gamma_to_hyperplane(gamma, X, y, C):
-    """
-    given a gamma (obtained via SVM)
-    find the coefficients α, β of the separating hyperplane
-
-    α here is found via an average. other ways to do this of course
-
-    needs the initial inputs (X, y, C) to the dual problem of course
-
-    """
-    
-    beta = numpy.dot(X.T, gamma)
-
-    # get a boolean array, same shape as gamma
-    # true when 0 < |γ_i| < C
-    supp = (0 < abs(gamma)) & (abs(gamma) < C)
-    s = numpy.nonzero(supp)[0]
-
-    alpha = (y[s] - X[s].dot(beta)).sum() / s.size
-
-    return alpha, beta
-    
 
 # get X and y from file
 d = loadmat(matfile)

@@ -83,10 +83,11 @@ def line_search(dt, p, x, A, b, λ):
 
         E_new = lasso_energy(x_new, A, b, λ)
 
-        if E >= (E_new + .001 * (x - x_new).T.dot(x - x_new)):
+        if not (E < (E_new + .001 * (x_new-x).T.dot(x_new-x))):
             return dt
         else:
             dt = dt/2.  # take a smaller timestep and try again
+
 
 def lasso(A, b, λ, dt=.001, tol=.000001):
     """
@@ -121,9 +122,12 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
     assert b.shape == (A.shape[0], 1), '''
         dimension problem, please pass input b as a column vector.'''
     
-    
+    # does this help at all?
+    A = A.astype('float64')
+    b = b.astype('float64')
+
     # initial guess is zero in R^n
-    x = numpy.zeros((A.shape[1], 1))
+    x = numpy.zeros((A.shape[1], 1), dtype='float64')
     
     # check out my fancy trick! 
     for i in count():
@@ -133,7 +137,7 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
 
         x_new = prox((x - dt*p), λ, dt)
 
-        q = (x_new - x) / dt
+        q = (x - x_new) / dt
         if (norm(q) < tol):
             break
         else:
