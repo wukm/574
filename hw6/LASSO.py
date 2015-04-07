@@ -89,7 +89,7 @@ def line_search(dt, p, x, A, b, λ):
 
     please consider a max iteration, just for deterministic implementation
 
-    i don't know what's going on here tbh. this is a variation of the general
+    i don't know what's going on here tbh. this is related to a general
     backtracking line search algorithm (with Armijo-Goldstein condition)
 
     en.wikipedia.org/wiki/Backtracking_line_search
@@ -159,7 +159,7 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
         x_new = prox(x - dt*p, λ, dt)
 
 
-        if not i % 100 and i > 0:
+        if not i % 1000 and i > 0:
             print("i={}\tnorm(q)={}\tdt={}".format(i,norm(q),dt))
             #pass
 
