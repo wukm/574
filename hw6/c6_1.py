@@ -17,6 +17,7 @@ import numpy
 from util import classify, normalize_columns
 from scipy.linalg import norm
 
+from sys import exit
 # load faces 1-37 subsets as training data
 X, lab = load_faces(list(range(1,38)), 'train')
 
@@ -29,37 +30,36 @@ Z2, _ = load_faces([38], 'test')
 # dimensionality reduction, 120 as new dimension is arbitrary
 p = 120
 R = randn(p,32256)
-
+exit(0)
 # normalize rows w.r.t. L2-norm
 for row in R:
     row /= norm(row)
 
 for row in X:
     row /= norm(row)
-
 # D is now the transpose, so training points as columns
 D = X.T
-
+A = R.dot(D)
 # get alphas for each of the 32 images of individual 33
 # via basis pursuit
 
 #λ=.001 # some more arbitrary parameter values
 λ=.001
 
-def _get_alpha(row, R, D, λ):
+def _get_alpha(row, R, A, λ):
     # iterating over rows of an mxn matrix gives arrays with shape (n,)
     # and lasso expects (n,1). classic. see docstring within lasso.
     z = row.reshape((-1,1))
 
     # multiply by our random matrix for dim. reduction
-    A = R.dot(D)
+    #A = R.dot(D) # this is just passed directly now
     b = R.dot(z)
 
-    return lasso(A, b, λ, dt=2, tol=.001)
+    return lasso(A, b, λ, dt=.001, tol=.000001)
 
-alpha = _get_alpha(Z[0], R, D, λ)
+#alpha = _get_alpha(Z[0], R, R.dot(D), λ)
 # yeah idk about putting such a computationally intensive function in a
 # list comp
-#alphas = [_get_alpha(row, R, D, λ) for row in Z]
-#classests = [classify(D, alpha, z, lab) for alpha, z in zip(alphas, Z)]
+alphas = [_get_alpha(row, R, A, λ) for row in Z]
+classests = [classify(D, alpha, z, lab) for alpha, z in zip(alphas, Z)]
 # classify(D, alpha, z, lab) -> class_est

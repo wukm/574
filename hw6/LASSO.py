@@ -42,7 +42,7 @@ def prox(z, λ, dt):
     c = λ * dt
     
     # this is equivalent to the analytical sol'n above (check it)
-    m = (z-c > 0)*(z-c) + (z+c < 0)*(z+c)
+    m = (z-c > 0.0).astype('double')*(z-c) + (z+c < 0.0).astype('double')*(z+c)
 
     return m
 
