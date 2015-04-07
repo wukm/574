@@ -4,9 +4,12 @@
 \usepackage{amsxtra, amscd, geometry, graphicx}
 \usepackage{endnotes}
 \usepackage{cancel}
+\usepackage{alltt}
 %\usepackage[all,cmtip]{xypic}
 \usepackage{mathrsfs}
 \usepackage{listings}
+%\usepackage{subfigure}
+\usepackage{subcaption}
 %\usepackage[pdftex]{hyperref}
 %\usepackage[dvips,bookmarks,bookmarksopen,backref,colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue}](hyperref}
 
@@ -220,7 +223,191 @@
 \end{prob*}
 
 \begin{proof}
+First suppose that $\nabla f(\vec{x}_{\star}) = 0$.
+Then $\forall \ \vec{x} \in \R^d$
+\[
+	f(\vec{x})-f(\vec{x}_{\star})) \geq
+	\langle \nabla f(\vec{x}_{\star}) , \vec{x} - \vec{x}_{\star} \rangle
+	= 0
+	\]
+	\[
+	\Rightarrow \quad f(\vec{x}) \geq f(\vec{x}_{\star})
+	\]
+	\[
+	\Rightarrow \quad f(\vec{x}_{\star}) = \min_{\vec{x} \in \R^d} f(\vec{x})
+\]
+Now suppose $f(\vec{x}_{\star}) = \min f(\vec{x})$. Using the inequality again with choices $x_{\star}$ and $x_{\star} + \lambda \vec{x}$ for some
+$\lambda \in \R$,
 
+\[
+\begin{aligned}
+f(\vec{x}_{\star} + \lambda \vec{x})-f(\vec{x}_{\star})) &\geq
+\langle \nabla f(\vec{x}_{\star}) , \lambda \vec{x} \rangle \\
+\Longrightarrow \quad
+\frac{f(\vec{x}_{\star} + \lambda \vec{x})-f(\vec{x}_{\star}))}{\lambda} &\geq
+\langle \nabla f(\vec{x}_{\star}) , \vec{x} \rangle \\
+\end{aligned}
+\]
 \end{proof}
+\clearpage
+\begin{prob}
+	(COLOR dataset with LOGClassify) See attached for source code.
+\end{prob}
+
+Output of the code, which displays the computed energies for the three values of $\lambda$, is shown below.
+
+
+\begin{alltt}
+	% python c3_1.py
+	\( \lambda\)=0.005	final energy is 18.803242244493468
+	\( \lambda\)=0.05	 final energy is 103.19933881689258
+	\( \lambda\)=0.5 	 final energy is 481.6992911373476
+\end{alltt}
+
+I noticed that the results were somewhat similar to last week's least squares approximation, but overall logarithmic classification was more accurate. Smaller values of $\lambda$ provided the best extraction. The results are shown below. Higher values of lambda began to inaccurately classify the window as background: $\lambda=.05$ has some parts of the window, while $lambda=.5$ has nearly all the window as background. The rest of the image seems equivalent for all three values.
+\clearpage
+\begin{figure}
+	\centering`
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=1\textwidth]{fg_005}
+		\caption{foreground with $\lambda=.005$}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=1\textwidth]{bg_005}
+		\caption{background with $\lambda = .005$ }
+	\end{subfigure}
+\end{figure}
+\begin{figure}
+		\centering`
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=1\textwidth]{fg_05}
+			\caption{foreground with $\lambda=.05$}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=1\textwidth]{bg_05}
+			\caption{background with $\lambda = .05$ }
+		\end{subfigure}
+\end{figure}
+
+\begin{figure}
+		\centering`
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=1\textwidth]{fg_5}
+			\caption{foreground with $\lambda=.5$}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=1\textwidth]{bg_5}
+			\caption{background with $\lambda = .5$ }
+		\end{subfigure}
+\end{figure}
+\clearpage
+
+
+\begin{prob}
+	(20NEWS dataset with LOGClassify) See attached for source code.
+\end{prob}
+
+I had to make a very uninteresting changes to LOGClassify.py in order to get it to work with sparse matrices. The changes involved manipulating dimesions (for some reason numpy really doesn't like to broadcast between shapes like (61118,1) and (61118,). Great stuff. I'm sure I'll be able to merge them, but for now, for full disclosure:
+\begin{verbatim}
+% diff LOGClassify.py LOGClassify2.py
+22c22
+<     alpha, beta = 0, numpy.zeros(X.shape[1])
+---
+>     alpha, beta = 0, numpy.zeros((X.shape[1],1))
+78c78
+<     p = numpy.zeros((beta.shape[0] +1))
+---
+>     p = numpy.zeros((beta.shape[0] +1, 1))
+
+\end{verbatim}
+\textbf{(a-e)} \, Output of the source code is given below.
+
+\begin{alltt}
+	% python c3_2.py
+--------------------------------------------------------------------------------
+\(\lambda\) = 1.0
+final energy with \(\lambda\)=1.0 was E=53.94825829336974
+accuracy with \(\lambda\)=1.0 was 734/796 = 92.21105527638191
+
+words found from group 10:
+hockey nhl playoff penguins need beat cup playoffs wings ca
+
+words found from group 11:
+pitching cubs anyone stadium sox up nl runs phillies baseball
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+\(\lambda\) = 10.0
+final energy with \(\lambda\)=10.0 was E=169.8301683152322
+accuracy with \(\lambda\)=10.0 was 730/796 = 91.70854271356784
+
+words found from group 10:
+hockey nhl playoff ca cup penguins playoffs wings pens espn
+
+words found from group 11:
+yankees mets nl stadium pitching sox up phillies runs baseball
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+\(\lambda\) = 100.0
+final energy with \(\lambda\)=100.0 was E=389.1747605791561
+accuracy with \(\lambda\)=100.0 was 709/796 = 89.07035175879398
+
+words found from group 10:
+hockey ca nhl cup leafs playoffs go wings pens will
+
+words found from group 11:
+braves sox mets hit pitching up phillies edu runs baseball
+--------------------------------------------------------------------------------
+\end{alltt}
+
+It's safe to assume that "group 10" articles are about Canadian ice-football, whereas "group 11" articles are about baseball.
+\clearpage
+\textbf{(f)} Using "feature extraction," I got very similar output with slightly better accuracy (around one percentage point for each $\lambda$)
+
+\begin{alltt}
+--------------------------------------------------------------------------------
+\(\lambda\) = 1.0
+final energy with \(\lambda\)=1.0 was E=69.9357153923059
+accuracy with \(\lambda\)=1.0 was 740/796 = 92.96482412060301
+
+words found from group 10:
+hockey nhl playoff penguins cup playoffs ca beat pittsburgh wings
+
+words found from group 11:
+ball jewish stadium sox cubs nl pitching phillies runs baseball
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+\(\lambda\) = 10.0
+final energy with \(\lambda\)=10.0 was E=222.9877373696374
+accuracy with \(\lambda\)=10.0 was 739/796 = 92.8391959798995
+
+words found from group 10:
+hockey nhl playoff ca playoffs cup penguins wings pittsburgh goals
+
+words found from group 11:
+stadium cubs mets sox ball edu phillies pitching runs baseball
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+\(\lambda\) = 100.0
+final energy with \(\lambda\)=100.0 was E=498.92152205890966
+accuracy with \(\lambda\)=100.0 was 726/796 = 91.20603015075378
+
+words found from group 10:
+hockey ca nhl cup playoffs playoff wings team penguins goals
+
+words found from group 11:
+up run ball phillies mets hit pitching edu runs baseball
+--------------------------------------------------------------------------------
+\end{alltt}
+\clearpage
+
+
+
+
 \end{document}
 
