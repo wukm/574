@@ -159,7 +159,7 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
         x_new = prox(x - dt*p, λ, dt)
 
 
-        if not i % 100 and i > 0:
+        if not i % 500 and i > 0:
             print("i={}\tnorm(q)={}\tdt={}".format(i,norm(q),dt))
             #pass
 
