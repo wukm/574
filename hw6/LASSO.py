@@ -60,8 +60,8 @@ def lasso_energy(x, A, b, λ):
     the scalar E(x) = λ||x||_1 + 1/2 (||Ax-b||_2)^2
     """
     # these are equivalent, use whichever
-    energy = λ*norm(x, ord=1) + .5 * (norm(A.dot(x) - b, ord=2)**2)
-    #energy = λ * sum(abs(x)) + .5 * (A.dot(x) - b).T.dot(A.dot(x) - b)
+    #energy = λ*norm(x, ord=1) + .5 * (norm(A.dot(x) - b, ord=2)**2)
+    energy = λ * sum(abs(x)) + .5 * (A.dot(x) - b).T.dot(A.dot(x) - b)
    
     return energy
 
@@ -151,13 +151,15 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
 
     # if you want a MAX_ITERATIONS, use
     # for i in range(MAX_ITERATIONS):
-    for i in count():
-        
+    
+    i = 0
+    #for i in count():
+    while True:   
+        i += 1
         p = lasso_gradient(x, A, b)
         dt = line_search(dt, p, x, A, b, λ)
 
         x_new = prox(x - dt*p, λ, dt)
-
 
         #if not i % 1000 and i > 0:
         #    print("i={}\tnorm(q)={}\tdt={}".format(i,norm(q),dt))
@@ -166,8 +168,8 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
 
         # to be used in the stopping condition ||q|| < ε
         # an alternative stopping condition would be || Ax - b || < ε
-        q = (x_new - x) / dt
-
+        q = x_new - x
+        q /= dt
         if (norm(q) < tol):
             break
         else:

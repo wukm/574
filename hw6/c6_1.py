@@ -35,11 +35,13 @@ def _get_alpha(row, R, A, λ):
     # multiply by our random matrix for dim. reduction
     #A = R.dot(D) # this is just passed directly now
     b = R.dot(z)
+    
+    alpha = lasso(A, b, .001)
 
-    return lasso(A, b, λ, dt=.001, tol=.000001)
+    return alpha
 
 # load faces 1-37 subsets as training data
-X, lab = load_faces(list(range(30,38)), 'train')
+X, lab = load_faces(list(range(1,38)), 'train')
 
 # load face 33 subset as test
 Z, lab_t = load_faces([33], 'test')
@@ -75,12 +77,31 @@ print('done loading finally')
 
 λ=.001
 class_ests = []
+alphas = []
 for row in Z:
-    alpha = _get_alpha(Z[0], R, A, λ)
+    alpha = _get_alpha(row, R, A, λ)
+    alphas.append(alpha)
     class_est = classify(D, alpha, row, lab) 
     class_ests.append(class_est)
 
+correct = sum((x == 33 for x in class_ests))
 
-# if you want list comps instead
-#alphas = [_get_alpha(row, R, A, λ) for row in Z]
-#classests = [classify(D, alpha, z, lab) for alpha, z in zip(alphas, Z)]
+from concentration import concentration
+
+z2alphas = [_get_alpha(row, R, A, .001) for row in Z2]
+
+conc = [concentration(alpha, lab) for alpha in z2alphas]
+
+outliers_recognized = [c > .5 for c in conc]
+
+print("the following outliers (individual 38) were (erronously) recognized")
+print("(note: these are in order in the directory)")
+print([i for i, c in enumerate(outliers_recognized) if c])
+print("...or {} total.".format(sum(outliers_recognized)))
+
+img33_recognized = [concentration(alpha, lab) > .5 for alpha in alpha]
+
+print("the following images (individual 33) were (correctly) recognized")
+print("(note: these are in order in the directory)")
+print([i for i, c in enumerate(img33_recognized) if c])
+print("...or {} total.".format(sum(img33conc)))

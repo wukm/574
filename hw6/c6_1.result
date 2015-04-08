@@ -1,0 +1,68 @@
+done loading finally
+done in 10048 iterations
+class found 33.0 with error 21.3073957117
+done in 4419 iterations
+class found 33.0 with error 13.8600330553
+done in 5594 iterations
+class found 33.0 with error 10.7530061934
+done in 16286 iterations
+class found 33.0 with error 11.3354092858
+done in 21755 iterations
+class found 33.0 with error 9.69694451625
+done in 5747 iterations
+class found 33.0 with error 18.9452416751
+done in 14945 iterations
+class found 33.0 with error 10.0973869838
+done in 10962 iterations
+class found 33.0 with error 4.75861020304
+done in 11425 iterations
+class found 33.0 with error 21.5916233045
+done in 14446 iterations
+class found 33.0 with error 27.4854394254
+done in 9248 iterations
+class found 33.0 with error 13.9227536712
+done in 9335 iterations
+class found 33.0 with error 10.3867897789
+done in 3382 iterations
+class found 33.0 with error 10.0193411161
+done in 22784 iterations
+class found 33.0 with error 7.71236973054
+done in 6109 iterations
+class found 33.0 with error 13.0716958445
+done in 12533 iterations
+class found 33.0 with error 11.2614261886
+done in 29908 iterations
+class found 33.0 with error 13.6919686164
+done in 14772 iterations
+class found 33.0 with error 19.9300240921
+^[[Bdone in 22117 iterations
+class found 33.0 with error 11.3091432898
+done in 22719 iterations
+class found 33.0 with error 4.75925931577
+done in 12829 iterations
+class found 33.0 with error 10.4436170265
+done in 26645 iterations
+class found 33.0 with error 22.0060681768
+done in 7444 iterations
+class found 33.0 with error 26.9010416091
+done in 21619 iterations
+class found 33.0 with error 12.9986775679
+done in 23454 iterations
+class found 33.0 with error 12.1727089683
+done in 12176 iterations
+class found 33.0 with error 11.3829508981
+done in 8213 iterations
+class found 33.0 with error 17.3727945262
+done in 17862 iterations
+class found 33.0 with error 7.64033357225
+done in 9384 iterations
+class found 33.0 with error 21.3164854416
+done in 13813 iterations
+class found 33.0 with error 14.5040323663
+done in 6020 iterations
+class found 33.0 with error 11.9310816383
+>>> 
+>>> class_ests
+[33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0, 33.0]
+>>> sum((x == 33 for x in class_ests))/len(class_ests)
+1.0
