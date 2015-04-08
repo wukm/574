@@ -27,6 +27,7 @@ def nonzeros(a):
     return a[a.nonzero()].reshape((1,-1))
 
 def _get_alpha(row, R, A, λ):
+
     # iterating over rows of an mxn matrix gives arrays with shape (n,)
     # and lasso expects (n,1). classic. see docstring within lasso.
     z = row.reshape((-1,1))
@@ -37,37 +38,37 @@ def _get_alpha(row, R, A, λ):
 
     return lasso(A, b, λ, dt=.001, tol=.000001)
 
-def problem_setup(rand_seed=None):
-    # load faces 1-37 subsets as training data
-    X, lab = load_faces(list(range(1,38)), 'train')
+# load faces 1-37 subsets as training data
+X, lab = load_faces(list(range(30,38)), 'train')
 
-    # load face 33 subset as test
-    Z, lab_t = load_faces([33], 'test')
+# load face 33 subset as test
+Z, lab_t = load_faces([33], 'test')
 
-    # load face 38 subset as an outlier (not in training set)
-    Z2, _ = load_faces([38], 'test')
+# load face 38 subset as an outlier (not in training set)
+Z2, _ = load_faces([38], 'test')
 
-    # dimensionality reduction, 120 as new dimension is arbitrary
-    #if rand_seed is not None:
-    #    seed(rand_seed)
+# dimensionality reduction, 120 as new dimension is arbitrary
+#if rand_seed is not None:
+#    seed(rand_seed)
 
-    p = 120
-    R = randn(p,32256)
+p = 120
+R = randn(p,32256)
+
+# normalize rows w.r.t. L2-norm
+for row in R:
+    row /= norm(row)
+
+for i, row in enumerate(X):
+    if not row.any():
+        raise Exception("row {} is empty. abort.".format(i))
+    row /= norm(row)
+# D is now the transpose, so training points as columns
+D = X.T
+A = R.dot(D)
     
-    # normalize rows w.r.t. L2-norm
-    for row in R:
-        row /= norm(row)
 
-    for row in X:
-        row /= norm(row)
-    # D is now the transpose, so training points as columns
-    D = X.T
-    A = R.dot(D)
-    
-    state = get_state() 
-    return X, lab, Z, lab_t, Z2, R, D, A
 
-X, lab, Z, lab_t, Z2, R, D, A = problem_setup()
+print('done loading finally')
 
 # get alphas for each of the 32 images of individual 33
 # via basis pursuit

@@ -159,9 +159,9 @@ def lasso(A, b, λ, dt=.001, tol=.000001):
         x_new = prox(x - dt*p, λ, dt)
 
 
-        if not i % 1000 and i > 0:
-            print("i={}\tnorm(q)={}\tdt={}".format(i,norm(q),dt))
-            #pass
+        #if not i % 1000 and i > 0:
+        #    print("i={}\tnorm(q)={}\tdt={}".format(i,norm(q),dt))
+        #    #pass
 
 
         # to be used in the stopping condition ||q|| < ε
