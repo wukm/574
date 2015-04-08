@@ -24,7 +24,7 @@ def img_file_to_row_vector(filename, dtype=None):
     not sure what dtype should be or if data stays in the right order
     """
     img = PIL.Image.open(filename)
-    img_m = numpy.array(img) # will be a 2d array dtype=uint8
+    img_m = numpy.array(img, dtype='double') # will be a 2d array dtype=uint8
 
     # make it a row vector
     img_m = img_m.reshape((1,-1))
@@ -68,7 +68,7 @@ def make_all_faces(path=None):
         # make matrix with the image in this subdrirectory as rows
         A = numpy.vstack(row_vectors)
         # make a (-1,1) shaped array with the class label for these images
-        L = numpy.array([class_no]*len(contents), dtype='f')
+        L = numpy.array([class_no]*len(contents), dtype='int')
         L = L.reshape((-1,1))
 
         if X is None:
@@ -135,7 +135,7 @@ def load_faces(classes=None, typestr='all', path=None):
         # also note that the indices in train_indices.txt are not in order for
         # whatever reason. not that it matters
         it = numpy.loadtxt(os.path.join(path, 'train_indices.txt'),
-        dtype='uint32')
+        dtype='int')
 
         it -= 1 # matlab is 1-indexed, python is 0-indexed
 
@@ -158,8 +158,10 @@ def load_faces(classes=None, typestr='all', path=None):
         faces, labels = class_filter(classes, faces, labels)
 
     # finally, transform faces from ints to doubles in [0,1]: [0,255] -> [0,1]
-    return faces/255., labels.astype('double')
+    faces = faces / 255.
+
+    return faces, labels.astype('d')
 
 if __name__ == "__main__":
 
-    X, lab = make_all_faces()
+    X, lab = load_faces(list(range(1,38)), 'train')
