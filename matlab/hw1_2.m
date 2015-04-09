@@ -1,6 +1,7 @@
-% images is a 7844x784 matrix -- each row is a vectorized image of a 1
+d = 2;
 
-[images, labels] = loadMNIST(2,'all');
+% images is a 7844x784 matrix -- each row is a vectorized image of d
+[images, labels] = loadMNIST(d,'all');
 
 [u,s,v] = svds(images, 2);
 
