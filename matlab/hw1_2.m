@@ -18,5 +18,10 @@ figure(2); imagesc(leads{2}); colormap jet;
 maxu = reshape(images(imax,:), [28 28]);
 minu = reshape(images(imin,:), [28 28]);
 
+
 figure(3); imagesc(maxu); colormap gray;
 figure(4); imagesc(minu); colormap gray;
+
+%anonymous function for filenames if saving would be something like this
+fname = @(i,what) sprintf('mnist_%d_%s.tiff', i, what)
+% where 'what' is like umax. umin, v1, v2 etc.
