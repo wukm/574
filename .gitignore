@@ -1,9 +1,11 @@
 #   ~/.gitignore
 #   hopefully this isn't too aggressive matching-wise :)
 
-# no pickles or log outputs
+# no pickles or log outputs. no large files
 **/*.pickle
 **/*.log
+**/*.npz
+**/*.npy
 
 # no PDFs
 **/*.pdf
@@ -12,6 +14,7 @@
 
 # no pycache stuff obvs
 **/__pycache__/
+#
 # don't import anything in a data dir
 **/data/*
 # no straggling jpgs that should be outputted elsewhere really
