@@ -7,8 +7,9 @@
 
 # no PDFs
 **/*.pdf
-# no matlab stuff (i don't own it)
-**/*.m
+# no matlab stuff i didn't write
+**/matlab/util/*.m
+
 # no pycache stuff obvs
 **/__pycache__/
 # don't import anything in a data dir
