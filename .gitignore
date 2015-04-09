@@ -27,3 +27,5 @@
 
 # these shouldn't be here when i commit anyway but eh. vim remnants
 **/*.swp
+# and matlab swaps too
+**/*.m~
