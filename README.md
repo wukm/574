@@ -5,7 +5,8 @@ The code here is a mix between
 * various coding problems/solutions
 * implementations in python
 
-I don't provide any project specs or MATLAB code here, as I don't own them.
+I don't provide any project specs or <s>MATLAB code here</s>, as I don't own them.
+(I recieved permission to host the code for this course).
 
 HOWEVER, most of the material is straightforward enough. Many of the datasets I
 work with can be found at the

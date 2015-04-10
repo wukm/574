@@ -6,19 +6,14 @@
 **/*.log
 **/*.npz
 **/*.npy
-
-# no PDFs
 **/*.pdf
-# no matlab stuff i didn't write
-**/matlab/util/*.m
+**/*.jpg
 
 # no pycache stuff obvs
 **/__pycache__/
 #
 # don't import anything in a data dir
 **/data/*
-# no straggling jpgs that should be outputted elsewhere really
-**/*.jpg
 
 # no latex remnants
 **/*.aux
