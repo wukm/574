@@ -30,8 +30,8 @@ dA = A(:,ind); % this is A with rows sorted by distance from xo
 
 % this defines how to color the points.
 % make the extracted ones a different color
-c = zeros(size(dA,2),1);
-c(1:n_extracted) = 1;
+c = zeros(size(dA,2),3);
+c(1:n_extracted,3) = 1; c(1:n_extracted,2) = 1;
 figure(i); scatter(dA(1,:),dA(2,:), [], c, 'Marker', '*'); i=i+1;
 
 % okay, so we extract these points. This is now "X" exactly, or what we
@@ -49,7 +49,8 @@ X = R*X_ex;
 X = scale_by*bsxfun(@minus, X, min(X,[],2));
 figure(i); scatter(X(1,:),X(2,:),'Marker', '*'); i=i+1;
 
-
+% now solve this problem to get the inverse transformation
+% T = utter_magic(A,x);
 
 
 
