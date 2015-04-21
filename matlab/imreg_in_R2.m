@@ -7,7 +7,9 @@
 
 
 
-N = 200; % total number of points in set
+
+
+N = 100; % total number of points in set
 n_extracted = 5; % the number of points to extract 
 
 scale_by = 10*rand() % get a random scaling value
@@ -51,7 +53,7 @@ figure(i); scatter(X(1,:),X(2,:),'Marker', '*'); i=i+1;
 
 % now solve this problem to get the inverse transformation
 % T = utter_magic(A,x);
-
+1
 
 
 
