@@ -5,6 +5,7 @@
 % or get *any* random subset. just throw a flag and do subfunctions ya
 
 clustered = 0;
+draw_graphs = 1;
 N = 100; % total number of points in set
 n_extracted = 5; % the number of points to extract 
 
@@ -34,10 +35,24 @@ end;
 % this defines how to color the points.
 % make the extracted ones a different color
 c = zeros(size(dA,2),3);
-c(1:n_extracted,3) = 1; c(1:n_extracted,2) = .5;
+c(1:n_extracted,3) = .2; c(1:n_extracted,2) = .5;
+
+szs = zeros(size(dA,2),1);
+szs(:) = 35;
+szs(1:n_extracted) = 70;
 
 % plot the entire set with the 'extracted points' as a different color
-figure(i); scatter(dA(1,:),dA(2,:), [], c, 'Marker', '*'); i=i+1;
+figure(i); scatter(dA(1,:),dA(2,:), szs, c, 'Marker', '*');
+if draw_graphs,
+    hold on;
+    for k = [1:n_extracted],
+        for j = [1:n_extracted],
+            plot(dA(1,[k j]),dA(2,[k j]), '-');
+        end;
+    end;
+    hold off;
+end;
+i = i + 1;
 
 % okay, so we extract these points. This is now "X" exactly, or what we
 % will hope to recover again.
@@ -52,7 +67,19 @@ R = [cos(theta) -sin(theta) ; sin(theta) cos(theta)];
 X = R*X_ex;
 % now translate it down to the origin and scale
 X = scale_by*bsxfun(@minus, X, min(X,[],2));
-figure(i); scatter(X(1,:),X(2,:),[],[0,.5,1],'Marker', '*'); i=i+1;
+%x = linspace(0,40); y = x;
+
+figure(i); scatter(X(1,:),X(2,:),70,[0,0,0], 'Marker', '*');
+if draw_graphs,
+    hold on;
+    for k = [1:n_extracted],
+        for j = [1:n_extracted],
+            plot(X(1,[k j]),X(2,[k j]), '-');
+        end;
+    end;
+    hold off;
+end;
+i = i + 1;
 
 % now solve this problem to get the inverse transformation
 % T = transformation_search(A,x);

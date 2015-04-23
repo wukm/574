@@ -1,0 +1,2 @@
+unsupervised classification via spectral clustering. accuracy: 50.200000
+semi-supervised classification accuracy: 93.600000

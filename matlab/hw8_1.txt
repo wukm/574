@@ -1,0 +1,4 @@
+200 iterations of semi-supervised K-means performed
+max accuracy:	91.700000%
+min accuracy:	57.300000%
+mean:	58.593500%
