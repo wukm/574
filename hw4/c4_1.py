@@ -2,6 +2,14 @@
 
 """
 using SVM to find a separating hyperplane
+
+btw, points at which Z fails for all C (and hard margin) are
+
+z[101] -> .99989919
+z[348] -> .99989919
+
+safe to assume that this is just rounding error
+
 """
 from scipy.io import loadmat
 import os.path
